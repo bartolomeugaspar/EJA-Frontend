@@ -75,6 +75,36 @@ const Home = () => {
       role: 'CEO, Fashion Hub',
       text: 'O networking e os workshops práticos foram fundamentais para o crescimento da minha marca. Gratidão eterna ao EJA!',
       image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Miguel Fernandes',
+      role: 'Fundador, EduTech Solutions',
+      text: 'O EJA transformou minha visão de negócio. Com o apoio dos mentores, consegui validar minha ideia e lançar uma plataforma educacional que já impactou milhares de estudantes.',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Luciana Alves',
+      role: 'Diretora, Green Energy Angola',
+      text: 'Participar dos programas do EJA foi decisivo para estruturar meu negócio de energia renovável. Hoje somos referência no setor!',
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Pedro Nunes',
+      role: 'CEO, FinTech Luanda',
+      text: 'A formação prática que recebi no EJA foi essencial para entender o mercado financeiro angolano. Hoje nossa fintech processa milhões em transações mensais.',
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Sofia Rodrigues',
+      role: 'Fundadora, Health Connect',
+      text: 'O EJA me conectou com investidores e parceiros estratégicos. Nossa startup de saúde digital agora opera em 5 províncias de Angola!',
+      image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'André Tavares',
+      role: 'Diretor, Food Innovation',
+      text: 'Graças ao EJA, transformei meu pequeno negócio de alimentos em uma empresa com distribuição nacional. O apoio foi fundamental em cada etapa!',
+      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop'
     }
   ]
 
