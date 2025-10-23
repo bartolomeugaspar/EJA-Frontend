@@ -50,61 +50,61 @@ const Home = () => {
       name: 'Maria Santos',
       role: 'Fundadora, TechStart',
       text: 'A EJA me deu as ferramentas e o conhecimento necessários para transformar minha ideia em um negócio real. Hoje tenho uma startup de sucesso!',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400&h=400&fit=crop'
     },
     {
       name: 'João Pedro',
       role: 'CEO, Digital Solutions',
       text: 'Os programas de mentoria são excepcionais. Aprendi mais em 3 meses do que em anos tentando sozinho. Recomendo fortemente!',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1506863530036-1efeddceb993?w=400&h=400&fit=crop'
     },
     {
       name: 'Ana Costa',
       role: 'Empreendedora Social',
       text: 'A comunidade EJA é incrível! Fiz conexões valiosas que se tornaram parceiros de negócios. Mudou completamente minha trajetória.',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop'
     },
     {
       name: 'Carlos Mendes',
       role: 'Fundador, AgriTech Angola',
       text: 'Através do EJA consegui acesso a mentores que me ajudaram a escalar meu negócio. Hoje empregamos mais de 20 pessoas!',
-      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&sat=-100&bri=10'
     },
     {
       name: 'Beatriz Silva',
       role: 'CEO, Fashion Hub',
       text: 'O networking e os workshops práticos foram fundamentais para o crescimento da minha marca. Gratidão eterna ao EJA!',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=400&h=400&fit=crop'
     },
     {
       name: 'Miguel Fernandes',
       role: 'Fundador, EduTech Solutions',
       text: 'O EJA transformou minha visão de negócio. Com o apoio dos mentores, consegui validar minha ideia e lançar uma plataforma educacional que já impactou milhares de estudantes.',
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=400&h=400&fit=crop'
     },
     {
       name: 'Luciana Alves',
       role: 'Diretora, Green Energy Angola',
       text: 'Participar dos programas do EJA foi decisivo para estruturar meu negócio de energia renovável. Hoje somos referência no setor!',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&h=400&fit=crop'
     },
     {
       name: 'Pedro Nunes',
       role: 'CEO, FinTech Luanda',
       text: 'A formação prática que recebi no EJA foi essencial para entender o mercado financeiro angolano. Hoje nossa fintech processa milhões em transações mensais.',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop'
     },
     {
       name: 'Sofia Rodrigues',
       role: 'Fundadora, Health Connect',
       text: 'O EJA me conectou com investidores e parceiros estratégicos. Nossa startup de saúde digital agora opera em 5 províncias de Angola!',
-      image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&h=400&fit=crop'
     },
     {
       name: 'André Tavares',
       role: 'Diretor, Food Innovation',
       text: 'Graças ao EJA, transformei meu pequeno negócio de alimentos em uma empresa com distribuição nacional. O apoio foi fundamental em cada etapa!',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop'
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop'
     }
   ]
 
