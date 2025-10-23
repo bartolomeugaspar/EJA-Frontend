@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { Menu, X, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import logo from '../assets/image3.jpeg'
 
 const Header = () => {
   const { isAuthenticated, user, logout } = useAuthStore()
@@ -17,10 +18,12 @@ const Header = () => {
       <nav className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">EJA</span>
-            </div>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src={logo} 
+              alt="EJA Logo" 
+              className="h-12 w-12 object-cover rounded-lg"
+            />
             <span className="font-bold text-xl text-gray-900 hidden sm:block">
               Empreendedorismo Jovem
             </span>
