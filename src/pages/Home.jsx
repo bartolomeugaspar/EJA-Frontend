@@ -235,43 +235,58 @@ const Home = () => {
       </section>
 
       {/* Objetivos Section */}
-      <section className="py-20 bg-white">
+      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="container-custom">
-          <div className="text-center mb-16">
-            <span className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Nossos Objetivos</span>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 mt-2">
+          <div className="text-center mb-20">
+            <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
+              Nossa Missão
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               O Que Buscamos Alcançar
             </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Trabalhamos com três pilares fundamentais para transformar o ecossistema empreendedor angolano
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gradient-to-br from-primary-50 to-white rounded-2xl p-8 border-2 border-primary-100 hover:border-primary-300 transition-all">
-              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mb-4">
-                <Target className="text-white" size={24} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border-t-4 border-blue-500">
+              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
+                <Target className="text-white" size={22} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Capacitar Jovens</h3>
-              <p className="text-gray-600">
-                Capacitar jovens empreendedores angolanos para o sucesso nos negócios através de formação prática e teórica
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Capacitar Jovens</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Formação prática e teórica para jovens empreendedores angolanos alcançarem o sucesso nos negócios.
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-secondary-50 to-white rounded-2xl p-8 border-2 border-secondary-100 hover:border-secondary-300 transition-all">
-              <div className="w-12 h-12 bg-secondary-600 rounded-lg flex items-center justify-center mb-4">
-                <Lightbulb className="text-white" size={24} />
+            <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border-t-4 border-orange-500">
+              <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-4">
+                <Lightbulb className="text-white" size={22} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Cultura Empreendedora</h3>
-              <p className="text-gray-600">
-                Fomentar a cultura empreendedora em Angola, inspirando mais jovens a seguirem o caminho do empreendedorismo
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Cultura Empreendedora</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Fomentar a cultura empreendedora em Angola, inspirando jovens a criarem soluções inovadoras.
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-white rounded-2xl p-8 border-2 border-green-100 hover:border-green-300 transition-all">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
-                <TrendingUp className="text-white" size={24} />
+            <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border-t-4 border-green-500">
+              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+                <TrendingUp className="text-white" size={22} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Desenvolvimento Econômico</h3>
-              <p className="text-gray-600">
-                Contribuir para o desenvolvimento econômico do país através do fortalecimento do ecossistema empreendedor
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Desenvolvimento Econômico</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Contribuir para o desenvolvimento do país através do fortalecimento do ecossistema empreendedor.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border-t-4 border-purple-500">
+              <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mb-4">
+                <Users className="text-white" size={22} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Networking</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Conectar jovens empreendedores criando uma rede colaborativa de apoio mútuo e parcerias.
               </p>
             </div>
           </div>
