@@ -8,7 +8,7 @@ import image4 from '../assets/image4.jpeg'
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
+  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
 
   const slides = [
     {
@@ -117,10 +117,11 @@ const Home = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
-    }, 4000)
+      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length)
+    }, 3000)
     return () => clearInterval(timer)
   }, [])
+
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length)
@@ -522,46 +523,49 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Carrossel de Depoimentos */}
-          <div className="relative max-w-5xl mx-auto">
+          {/* Carrossel de Depoimentos - 3 por vez */}
+          <div className="relative">
             <div className="overflow-hidden">
-              <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}>
-                {testimonials.map((testimonial, index) => (
-                  <div key={index} className="w-full flex-shrink-0 px-4">
-                    <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
-                      <div className="flex flex-col md:flex-row items-center gap-8">
-                        {/* Imagem */}
-                        <div className="flex-shrink-0">
-                          <img 
-                            src={testimonial.image} 
-                            alt={testimonial.name} 
-                            className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-primary-100 shadow-lg"
-                          />
-                        </div>
-                        
-                        {/* Conteúdo */}
-                        <div className="flex-1 text-center md:text-left">
-                          <div className="flex items-center justify-center md:justify-start mb-4">
-                            {[...Array(5)].map((_, i) => (
-                              <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                              </svg>
-                            ))}
-                          </div>
-                          
-                          <p className="text-gray-700 text-lg md:text-xl italic mb-6 leading-relaxed">
-                            "{testimonial.text}"
-                          </p>
-                          
-                          <div>
-                            <p className="font-bold text-gray-900 text-xl">{testimonial.name}</p>
-                            <p className="text-primary-600 font-semibold">{testimonial.role}</p>
-                          </div>
-                        </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[0, 1, 2].map((offset) => {
+                  const index = (currentTestimonialIndex + offset) % testimonials.length
+                  const testimonial = testimonials[index]
+                  return (
+                    <div 
+                      key={index} 
+                      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-6 flex flex-col"
+                    >
+                      {/* Imagem */}
+                      <div className="flex justify-center mb-4">
+                        <img 
+                          src={testimonial.image} 
+                          alt={testimonial.name} 
+                          className="w-24 h-24 rounded-full object-cover border-4 border-primary-100 shadow-md"
+                        />
+                      </div>
+                      
+                      {/* Estrelas */}
+                      <div className="flex items-center justify-center mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                          </svg>
+                        ))}
+                      </div>
+                      
+                      {/* Texto */}
+                      <p className="text-gray-600 text-sm italic mb-4 leading-relaxed text-center flex-grow">
+                        "{testimonial.text}"
+                      </p>
+                      
+                      {/* Nome e Cargo */}
+                      <div className="text-center pt-4 border-t border-gray-100">
+                        <p className="font-bold text-gray-900 mb-1">{testimonial.name}</p>
+                        <p className="text-primary-600 font-semibold text-sm">{testimonial.role}</p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </div>
 
@@ -570,10 +574,10 @@ const Home = () => {
               {testimonials.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${
-                    index === currentTestimonial 
-                      ? 'bg-primary-600 w-8' 
+                  onClick={() => setCurrentTestimonialIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentTestimonialIndex 
+                      ? 'bg-primary-600 w-6' 
                       : 'bg-gray-300 hover:bg-gray-400'
                   }`}
                 />
