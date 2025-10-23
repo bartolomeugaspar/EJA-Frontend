@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { Mail, Lock, AlertCircle } from 'lucide-react'
+import { Mail, Lock, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
+import loginImage from '../assets/image1.jpeg'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -30,28 +31,31 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Bem-vindo de volta</h2>
-          <p className="mt-2 text-gray-600">Entre na sua conta EJA</p>
+          <h2 className="text-4xl font-bold text-gray-900 mb-3">Entrar na sua conta</h2>
+          <p className="text-lg text-gray-600">Bem-vindo de volta ao EJA</p>
         </div>
 
-        <div className="card">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+
           {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
-              <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
+                <p className="text-sm text-red-700 font-medium">{error}</p>
+              </div>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
                 E-mail
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
                   id="email"
                   name="email"
@@ -59,18 +63,18 @@ const Login = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="input pl-10"
+                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-gray-900"
                   placeholder="seu@email.com"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="senha" className="block text-sm font-semibold text-gray-900 mb-2">
                 Senha
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
                 <input
                   id="senha"
                   name="senha"
@@ -78,46 +82,65 @@ const Login = () => {
                   required
                   value={formData.senha}
                   onChange={handleChange}
-                  className="input pl-10"
+                  className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-gray-900"
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pt-2">
               <div className="flex items-center">
                 <input
                   id="remember"
                   name="remember"
                   type="checkbox"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded cursor-pointer"
                 />
-                <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
-                  Lembrar-me
+                <label htmlFor="remember" className="ml-2 block text-sm text-gray-700 cursor-pointer">
+                  Lembrar por 30 dias
                 </label>
               </div>
 
-              <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700">
-                Esqueceu a senha?
+              <Link to="/forgot-password" className="text-sm text-primary-600 hover:text-primary-700 font-semibold">
+                Esqueceu?
               </Link>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="btn btn-primary w-full"
+              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-4 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all font-bold text-base flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
-              {isLoading ? 'Entrando...' : 'Entrar'}
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <span>Entrando...</span>
+                </>
+              ) : (
+                <>
+                  <span>Entrar</span>
+                  <ArrowRight size={20} />
+                </>
+              )}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Não tem uma conta?{' '}
-              <Link to="/register" className="text-primary-600 hover:text-primary-700 font-medium">
-                Registre-se gratuitamente
-              </Link>
-            </p>
+          <div className="mt-8">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500">Não tem uma conta?</span>
+              </div>
+            </div>
+
+            <Link 
+              to="/register" 
+              className="mt-6 w-full inline-flex items-center justify-center px-6 py-3.5 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all"
+            >
+              Criar conta gratuitamente
+            </Link>
           </div>
         </div>
       </div>

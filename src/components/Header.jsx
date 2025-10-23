@@ -25,7 +25,7 @@ const Header = () => {
               className="h-12 w-12 object-cover rounded-lg"
             />
             <span className="font-bold text-xl text-gray-900 hidden sm:block">
-              Empreendedorismo Jovem
+              EJA
             </span>
           </Link>
 
@@ -68,14 +68,9 @@ const Header = () => {
                 </button>
               </>
             ) : (
-              <>
-                <Link to="/login" className="btn btn-outline">
-                  Entrar
-                </Link>
-                <Link to="/register" className="btn btn-primary">
-                  Registrar
-                </Link>
-              </>
+              <Link to="/login" className="btn btn-primary">
+                Entrar
+              </Link>
             )}
           </div>
 
@@ -148,22 +143,13 @@ const Header = () => {
                     </button>
                   </>
                 ) : (
-                  <div className="flex flex-col space-y-2">
-                    <Link
-                      to="/login"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="btn btn-outline w-full"
-                    >
-                      Entrar
-                    </Link>
-                    <Link
-                      to="/register"
-                      onClick={() => setIsMenuOpen(false)}
-                      className="btn btn-primary w-full"
-                    >
-                      Registrar
-                    </Link>
-                  </div>
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="btn btn-primary w-full"
+                  >
+                    Entrar
+                  </Link>
                 )}
               </div>
             </div>
