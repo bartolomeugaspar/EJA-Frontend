@@ -11,7 +11,7 @@ const Home = () => {
 
   const slides = [
     {
-      image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&h=800&fit=crop',
+      image: 'https://mulheres.ao/wp-content/uploads/2023/03/118987268_363676338395483_1818947604657949744_n-1024x682.jpeg',
       title: 'Empreendedorismo Jovem em Ação',
       subtitle: 'Capacitando Jovens Empreendedores Angolanos',
       description: 'Transforme sua ideia em um negócio de sucesso com nosso apoio',
@@ -19,27 +19,27 @@ const Home = () => {
       ctaLink: '/register'
     },
     {
-      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1920&h=800&fit=crop',
+      image: 'https://www.menosfios.com/wp-content/uploads/2022/03/50586558_10217909771481528_2270938660402626560_o.jpg',
       title: 'Palestras e Workshops',
       subtitle: 'Aprenda com os Melhores',
       description: 'Acesso a conteúdo exclusivo com especialistas do mercado',
-      cta: 'Ver Programas',
-      ctaLink: '/programs'
+      cta: 'Começar Agora',
+      ctaLink: '/register'
     },
     {
-      image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&h=800&fit=crop',
+      image: 'https://cdn.bndlyr.com/smdzvtzq6aukhdtc/_assets/samuel-kwabena-ansong-cs4icpewfjy-unsplash.jpg?fit=pad&w=1200&h=630&bg=ffffff',
       title: 'Mentoria Personalizada',
       subtitle: 'Acompanhamento Individual',
       description: 'Mentores experientes para guiar sua jornada empreendedora',
-      cta: 'Saber Mais',
-      ctaLink: '/about'
+      cta: 'Começar Agora',
+      ctaLink: '/register'
     },
     {
-      image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1920&h=800&fit=crop',
+      image: 'https://fimdesemana.co.mz/wp-content/uploads/2025/03/Visita-ao-FIPAG-2-1024x683.webp',
       title: 'Comunidade Ativa',
       subtitle: 'Networking que Transforma',
       description: 'Conecte-se com outros empreendedores e crie parcerias',
-      cta: 'Junte-se a Nós',
+      cta: 'Começar Agora',
       ctaLink: '/register'
     }
   ]
@@ -76,7 +76,7 @@ const Home = () => {
               alt={slide.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/70 via-slate-800/50 to-transparent"></div>
             
             {/* Content */}
             <div className="absolute inset-0 flex items-center">
@@ -93,7 +93,7 @@ const Home = () => {
                   </p>
                   <Link
                     to={slide.ctaLink}
-                    className="inline-flex items-center px-8 py-3 bg-secondary-600 text-white rounded-lg hover:bg-secondary-700 transition font-bold text-lg shadow-2xl"
+                    className="inline-flex items-center px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-bold text-lg shadow-2xl hover:shadow-primary-500/50"
                   >
                     {slide.cta}
                     <ArrowRight className="ml-2" size={20} />
