@@ -332,25 +332,54 @@ const Home = () => {
       </section>
 
       {/* Parceiros Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="container-custom">
-          <div className="text-center mb-12">
-            <span className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Parceiros</span>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 mt-2">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
+              Parceiros
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Quem Nos Apoia
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Trabalhamos com empresas e organizações que apoiam o empreendedorismo em Angola
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Trabalhamos com empresas e organizações comprometidas com o desenvolvimento do empreendedorismo em Angola
             </p>
           </div>
 
-          <div className="flex items-center justify-center gap-12 flex-wrap">
-            <div className="bg-gray-50 rounded-xl p-8 hover:bg-gray-100 transition-all">
-              <p className="text-2xl font-bold text-gray-900">Queta Boost</p>
-              <p className="text-sm text-gray-600">Consultoria Estratégica</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            {/* Queta Boost */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Award className="text-white" size={32} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Queta Boost</h3>
+              <p className="text-primary-600 font-semibold mb-3">Consultoria Estratégica</p>
+              <p className="text-sm text-gray-600">
+                Apoio em estratégia e desenvolvimento de negócios
+              </p>
             </div>
-            <div className="bg-gray-50 rounded-xl p-8 hover:bg-gray-100 transition-all">
-              <p className="text-xl font-semibold text-gray-700">+ Outros Parceiros</p>
+
+            {/* Parceiro 2 */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Rocket className="text-white" size={32} />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Inovação Hub</h3>
+              <p className="text-orange-600 font-semibold mb-3">Aceleração de Startups</p>
+              <p className="text-sm text-gray-600">
+                Programas de aceleração e mentoria
+              </p>
+            </div>
+
+            {/* Mais Parceiros */}
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-md hover:shadow-lg transition-shadow border-2 border-dashed border-gray-300 text-center flex flex-col items-center justify-center">
+              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <Users className="text-gray-400" size={28} />
+              </div>
+              <p className="text-xl font-bold text-gray-700 mb-2">+ Outros Parceiros</p>
+              <p className="text-sm text-gray-600">
+                Junte-se a nós nessa missão
+              </p>
             </div>
           </div>
         </div>
