@@ -8,6 +8,7 @@ import image4 from '../assets/image4.jpeg'
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentTestimonial, setCurrentTestimonial] = useState(0)
 
   const slides = [
     {
@@ -44,10 +45,50 @@ const Home = () => {
     }
   ]
 
+  const testimonials = [
+    {
+      name: 'Maria Santos',
+      role: 'Fundadora, TechStart',
+      text: 'A EJA me deu as ferramentas e o conhecimento necessários para transformar minha ideia em um negócio real. Hoje tenho uma startup de sucesso!',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'João Pedro',
+      role: 'CEO, Digital Solutions',
+      text: 'Os programas de mentoria são excepcionais. Aprendi mais em 3 meses do que em anos tentando sozinho. Recomendo fortemente!',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Ana Costa',
+      role: 'Empreendedora Social',
+      text: 'A comunidade EJA é incrível! Fiz conexões valiosas que se tornaram parceiros de negócios. Mudou completamente minha trajetória.',
+      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Carlos Mendes',
+      role: 'Fundador, AgriTech Angola',
+      text: 'Através do EJA consegui acesso a mentores que me ajudaram a escalar meu negócio. Hoje empregamos mais de 20 pessoas!',
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Beatriz Silva',
+      role: 'CEO, Fashion Hub',
+      text: 'O networking e os workshops práticos foram fundamentais para o crescimento da minha marca. Gratidão eterna ao EJA!',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop'
+    }
+  ]
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)
+    }, 4000)
     return () => clearInterval(timer)
   }, [])
 
@@ -349,8 +390,12 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {/* Queta Boost */}
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Award className="text-white" size={32} />
+              <div className="w-32 h-32 mx-auto mb-6 rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center">
+                <img 
+                  src={image4} 
+                  alt="Queta Boost" 
+                  className="w-full h-full object-cover"
+                />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Queta Boost</h3>
               <p className="text-primary-600 font-semibold mb-3">Consultoria Estratégica</p>
@@ -433,59 +478,77 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container-custom">
           <div className="text-center mb-16">
-            <span className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Depoimentos</span>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 mt-2">
+            <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
+              Depoimentos
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Histórias de Sucesso
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Conheça jovens empreendedores que transformaram suas vidas através do EJA
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: 'Maria Santos',
-                role: 'Fundadora, TechStart',
-                text: 'A EJA me deu as ferramentas e o conhecimento necessários para transformar minha ideia em um negócio real. Hoje tenho uma startup de sucesso!',
-                image: image1
-              },
-              {
-                name: 'João Pedro',
-                role: 'CEO, Digital Solutions',
-                text: 'Os programas de mentoria são excepcionais. Aprendi mais em 3 meses do que em anos tentando sozinho. Recomendo fortemente!',
-                image: image2
-              },
-              {
-                name: 'Ana Costa',
-                role: 'Empreendedora',
-                text: 'A comunidade EJA é incrível! Fiz conexões valiosas que se tornaram parceiros de negócios. Mudou completamente minha trajetória.',
-                image: image3
-              }
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-                <div className="h-48 overflow-hidden">
-                  <img src={testimonial.image} alt={testimonial.name} className="w-full h-full object-cover" />
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                      </svg>
-                    ))}
+          {/* Carrossel de Depoimentos */}
+          <div className="relative max-w-5xl mx-auto">
+            <div className="overflow-hidden">
+              <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentTestimonial * 100}%)` }}>
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-4">
+                    <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+                      <div className="flex flex-col md:flex-row items-center gap-8">
+                        {/* Imagem */}
+                        <div className="flex-shrink-0">
+                          <img 
+                            src={testimonial.image} 
+                            alt={testimonial.name} 
+                            className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-primary-100 shadow-lg"
+                          />
+                        </div>
+                        
+                        {/* Conteúdo */}
+                        <div className="flex-1 text-center md:text-left">
+                          <div className="flex items-center justify-center md:justify-start mb-4">
+                            {[...Array(5)].map((_, i) => (
+                              <svg key={i} className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                              </svg>
+                            ))}
+                          </div>
+                          
+                          <p className="text-gray-700 text-lg md:text-xl italic mb-6 leading-relaxed">
+                            "{testimonial.text}"
+                          </p>
+                          
+                          <div>
+                            <p className="font-bold text-gray-900 text-xl">{testimonial.name}</p>
+                            <p className="text-primary-600 font-semibold">{testimonial.role}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-gray-600 mb-4 italic text-sm leading-relaxed">"{testimonial.text}"</p>
-                  <div className="pt-4 border-t border-gray-100">
-                    <p className="font-bold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            {/* Indicadores */}
+            <div className="flex justify-center gap-2 mt-8">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentTestimonial(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentTestimonial 
+                      ? 'bg-primary-600 w-8' 
+                      : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
