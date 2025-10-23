@@ -155,14 +155,18 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-gradient-to-b from-white to-gray-50">
         <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-              Como Podemos Ajudar
+          <div className="text-center mb-20">
+            <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
+              O Que Oferecemos
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Tudo Para o Seu Sucesso
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Oferecemos tudo que você precisa para transformar sua ideia em um negócio de sucesso
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Oferecemos um ecossistema completo de apoio ao empreendedorismo jovem, 
+              com recursos práticos e mentoria especializada para transformar sua visão em realidade
             </p>
           </div>
 
@@ -170,40 +174,62 @@ const Home = () => {
             {[
               {
                 icon: BookOpen,
-                title: 'Palestras',
-                description: 'Palestras inspiradoras sobre empreendedorismo e negócios com especialistas do mercado',
-                color: 'primary'
+                title: 'Palestras & Workshops',
+                description: 'Eventos presenciais e online com especialistas renomados do mercado angolano e internacional',
+                color: 'bg-blue-500',
+                bgColor: 'bg-blue-50',
+                borderColor: 'border-blue-200'
               },
               {
                 icon: Users,
-                title: 'Mentorias',
-                description: 'Acompanhamento personalizado com mentores experientes para guiar sua jornada',
-                color: 'secondary'
+                title: 'Mentoria Personalizada',
+                description: 'Acompanhamento individual com empreendedores experientes que já trilharam o caminho do sucesso',
+                color: 'bg-orange-500',
+                bgColor: 'bg-orange-50',
+                borderColor: 'border-orange-200'
               },
               {
-                icon: Calendar,
-                title: 'Programas',
-                description: 'Programas estruturados de desenvolvimento para jovens empreendedores',
-                color: 'green'
+                icon: Rocket,
+                title: 'Programas de Aceleração',
+                description: 'Programas estruturados de 3 a 6 meses para desenvolver e validar seu modelo de negócio',
+                color: 'bg-green-500',
+                bgColor: 'bg-green-50',
+                borderColor: 'border-green-200'
               },
               {
-                icon: Target,
-                title: 'Recursos',
-                description: 'Acesso a ferramentas, templates e recursos exclusivos para membros',
-                color: 'purple'
+                icon: Award,
+                title: 'Recursos Exclusivos',
+                description: 'Biblioteca digital com templates, ferramentas, estudos de caso e materiais de apoio',
+                color: 'bg-purple-500',
+                bgColor: 'bg-purple-50',
+                borderColor: 'border-purple-200'
               }
             ].map((service, index) => {
               const Icon = service.icon
               return (
-                <div key={index} className="bg-white rounded-xl p-8 hover:shadow-xl transition-shadow">
-                  <div className={`w-16 h-16 bg-${service.color}-100 rounded-lg flex items-center justify-center mb-6`}>
-                    <Icon className={`text-${service.color}-600`} size={28} />
+                <div 
+                  key={index} 
+                  className={`bg-white rounded-2xl p-8 border-2 ${service.borderColor} hover:shadow-2xl hover:scale-105 transition-all duration-300 group`}
+                >
+                  <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
+                    <Icon className="text-white" size={28} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{service.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{service.description}</p>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
+                  <p className="text-gray-600 leading-relaxed text-sm">{service.description}</p>
                 </div>
               )
             })}
+          </div>
+
+          {/* CTA Button */}
+          <div className="text-center mt-16">
+            <Link 
+              to="/register" 
+              className="inline-flex items-center px-8 py-4 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition font-bold text-lg shadow-xl hover:shadow-2xl"
+            >
+              Começar Agora
+              <ArrowRight className="ml-2" size={20} />
+            </Link>
           </div>
         </div>
       </section>

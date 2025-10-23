@@ -44,14 +44,19 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-[calc(100vh-200px)] py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Criar Conta</h2>
-          <p className="mt-2 text-gray-600">Junte-se à comunidade EJA</p>
+    <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-gray-100 px-4 py-8 relative overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '2s'}}></div>
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-15 animate-pulse" style={{animationDelay: '4s'}}></div>
+      
+      <div className="max-w-2xl w-full relative z-10">
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Criar Conta</h2>
+          <p className="text-gray-600">Junte-se à comunidade EJA</p>
         </div>
 
-        <div className="card">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-6 border border-white/20">
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-2">
               <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
@@ -59,10 +64,10 @@ const Register = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Informações Pessoais */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Informações Pessoais</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Informações Pessoais</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
                   <label htmlFor="nome_completo" className="block text-sm font-medium text-gray-700 mb-1">
@@ -162,7 +167,7 @@ const Register = () => {
 
             {/* Informações Acadêmicas */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Informações Acadêmicas</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Informações Acadêmicas</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="nivel_escolaridade" className="block text-sm font-medium text-gray-700 mb-1">
@@ -225,7 +230,7 @@ const Register = () => {
 
             {/* Senha */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Segurança</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Segurança</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-1">
@@ -292,19 +297,35 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="btn btn-primary w-full"
+              className="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white py-3 rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all font-bold text-base shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed mt-6"
             >
-              {isLoading ? 'Criando conta...' : 'Criar Conta'}
+              {isLoading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  <span>Criando conta...</span>
+                </div>
+              ) : (
+                'Criar Conta'
+              )}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
-              Já tem uma conta?{' '}
-              <Link to="/login" className="text-primary-600 hover:text-primary-700 font-medium">
-                Entrar
-              </Link>
-            </p>
+          <div className="mt-6">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500">Já tem uma conta?</span>
+              </div>
+            </div>
+
+            <Link 
+              to="/login" 
+              className="mt-4 w-full inline-flex items-center justify-center px-6 py-3 border-2 border-gray-300 rounded-xl text-gray-700 font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all"
+            >
+              Entrar
+            </Link>
           </div>
         </div>
       </div>
