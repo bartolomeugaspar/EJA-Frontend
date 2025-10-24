@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { Home, BookOpen, Calendar, User, Settings, FileText } from 'lucide-react'
 
-const Sidebar = () => {
+const Sidebar = ({ onItemClick }) => {
   const location = useLocation()
 
   const menuItems = [
@@ -27,7 +27,7 @@ const Sidebar = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  onClick={() => console.log('Navegando para:', item.path)}
+                  onClick={onItemClick}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
                     isActive
                       ? 'bg-yellow-50 text-yellow-700 font-medium shadow-sm'

@@ -48,7 +48,7 @@ const AdminLogs = () => {
       {/* Alertas de Segurança */}
       {alerts && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                 <AlertTriangle className="text-red-600" size={24} />
@@ -61,7 +61,7 @@ const AdminLogs = () => {
             <p className="text-sm text-gray-600">Tentativas suspeitas</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                 <Shield className="text-orange-600" size={24} />
@@ -74,7 +74,7 @@ const AdminLogs = () => {
             <p className="text-sm text-gray-600">Endereços bloqueados</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <XCircle className="text-blue-600" size={24} />
@@ -86,6 +86,79 @@ const AdminLogs = () => {
             </h3>
             <p className="text-sm text-gray-600">Tentativas falhas ({periodo})</p>
           </div>
+        </div>
+      )}
+
+      {/* Alertas Detalhados - Emails e IPs Suspeitos */}
+      {alerts && (alerts.alertas_por_email?.length > 0 || alerts.alertas_por_ip?.length > 0) && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Alertas por Email */}
+          {alerts.alertas_por_email?.length > 0 && (
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-gray-900">Emails Suspeitos</h3>
+                <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
+                  {alerts.alertas_por_email.length} alertas
+                </span>
+              </div>
+              <div className="space-y-2">
+                {alerts.alertas_por_email.slice(0, 5).map((alerta, index) => (
+                  <div key={index} className="group p-3 bg-gradient-to-r from-red-50 to-red-50/30 hover:from-red-100 hover:to-red-50 rounded-lg border border-red-200 transition-all">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <p className="font-semibold text-sm text-gray-900 truncate flex-1 mr-2">{alerta.email}</p>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase flex-shrink-0 ${
+                        alerta.nivel_risco === 'alto' ? 'bg-red-500 text-white' :
+                        alerta.nivel_risco === 'médio' ? 'bg-orange-500 text-white' :
+                        'bg-yellow-500 text-white'
+                      }`}>
+                        {alerta.nivel_risco}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                      <span className="font-semibold text-red-700">{alerta.tentativas}</span>
+                      <span>tentativas de</span>
+                      <span className="font-semibold text-red-700">{alerta.ips.length}</span>
+                      <span>IP(s)</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Alertas por IP */}
+          {alerts.alertas_por_ip?.length > 0 && (
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-bold text-gray-900">IPs Suspeitos</h3>
+                <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">
+                  {alerts.alertas_por_ip.length} alertas
+                </span>
+              </div>
+              <div className="space-y-2">
+                {alerts.alertas_por_ip.slice(0, 5).map((alerta, index) => (
+                  <div key={index} className="group p-3 bg-gradient-to-r from-orange-50 to-orange-50/30 hover:from-orange-100 hover:to-orange-50 rounded-lg border border-orange-200 transition-all">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <code className="font-semibold text-gray-900 text-xs bg-gray-100 px-2 py-1 rounded">{alerta.ip}</code>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase flex-shrink-0 ml-2 ${
+                        alerta.nivel_risco === 'alto' ? 'bg-red-500 text-white' :
+                        alerta.nivel_risco === 'médio' ? 'bg-orange-500 text-white' :
+                        'bg-yellow-500 text-white'
+                      }`}>
+                        {alerta.nivel_risco}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-gray-600">
+                      <span className="font-semibold text-orange-700">{alerta.tentativas}</span>
+                      <span>tentativas em</span>
+                      <span className="font-semibold text-orange-700">{alerta.emails.length}</span>
+                      <span>email(s)</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -169,62 +242,6 @@ const AdminLogs = () => {
         )}
       </div>
 
-      {/* Alertas por Email e IP */}
-      {alerts && (alerts.alertas_por_email?.length > 0 || alerts.alertas_por_ip?.length > 0) && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-          {/* Alertas por Email */}
-          {alerts.alertas_por_email?.length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Emails Suspeitos</h3>
-              <div className="space-y-3">
-                {alerts.alertas_por_email.slice(0, 5).map((alerta, index) => (
-                  <div key={index} className="p-4 bg-red-50 rounded-lg border border-red-200">
-                    <div className="flex items-center justify-between mb-2">
-                      <p className="font-medium text-gray-900">{alerta.email}</p>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        alerta.nivel_risco === 'alto' ? 'bg-red-100 text-red-700' :
-                        alerta.nivel_risco === 'médio' ? 'bg-orange-100 text-orange-700' :
-                        'bg-yellow-100 text-yellow-700'
-                      }`}>
-                        {alerta.nivel_risco}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {alerta.tentativas} tentativas falhas de {alerta.ips.length} IP(s) diferentes
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Alertas por IP */}
-          {alerts.alertas_por_ip?.length > 0 && (
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">IPs Suspeitos</h3>
-              <div className="space-y-3">
-                {alerts.alertas_por_ip.slice(0, 5).map((alerta, index) => (
-                  <div key={index} className="p-4 bg-orange-50 rounded-lg border border-orange-200">
-                    <div className="flex items-center justify-between mb-2">
-                      <code className="font-medium text-gray-900">{alerta.ip}</code>
-                      <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        alerta.nivel_risco === 'alto' ? 'bg-red-100 text-red-700' :
-                        alerta.nivel_risco === 'médio' ? 'bg-orange-100 text-orange-700' :
-                        'bg-yellow-100 text-yellow-700'
-                      }`}>
-                        {alerta.nivel_risco}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      {alerta.tentativas} tentativas em {alerta.emails.length} email(s) diferentes
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
     </div>
   )
 }

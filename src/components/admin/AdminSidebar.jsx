@@ -17,7 +17,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ onItemClick }) => {
   const location = useLocation()
   const navigate = useNavigate()
   const { logout } = useAuthStore()
@@ -65,6 +65,7 @@ const AdminSidebar = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
+                  onClick={onItemClick}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
                     isActive
                       ? 'bg-primary-50 text-primary-700 font-medium shadow-sm'

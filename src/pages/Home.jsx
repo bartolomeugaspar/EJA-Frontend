@@ -11,7 +11,7 @@ const Home = () => {
 
   const slides = [
     {
-      image: 'https://mulheres.ao/wp-content/uploads/2023/03/118987268_363676338395483_1818947604657949744_n-1024x682.jpeg',
+      image: 'https://incubadora.unizambeze.ac.mz/pluginfile.php/54/mod_folder/content/0/Incuba%C3%A7%C3%A3o.jpg',
       title: 'Empreendedorismo Jovem em Ação',
       subtitle: 'Capacitando Jovens Empreendedores Angolanos',
       description: 'Transforme sua ideia em um negócio de sucesso com nosso apoio',
