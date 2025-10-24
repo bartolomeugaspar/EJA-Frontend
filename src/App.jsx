@@ -30,6 +30,7 @@ import AdminMembers from './pages/admin/AdminMembers'
 import AdminArticles from './pages/admin/AdminArticles'
 import ArticleForm from './pages/admin/ArticleForm'
 import AdminPrograms from './pages/admin/AdminPrograms'
+import ProgramForm from './pages/admin/ProgramForm'
 import AdminContacts from './pages/admin/AdminContacts'
 import AdminReports from './pages/admin/AdminReports'
 import AdminLogs from './pages/admin/AdminLogs'
@@ -86,6 +87,8 @@ function App() {
         <Route path="articles/new" element={<ArticleForm />} />
         <Route path="articles/edit/:id" element={<ArticleForm />} />
         <Route path="programs" element={<AdminPrograms />} />
+        <Route path="programs/new" element={<ProgramForm />} />
+        <Route path="programs/edit/:id" element={<ProgramForm />} />
         <Route path="contacts" element={<AdminContacts />} />
         <Route path="reports" element={<AdminReports />} />
         <Route path="logs" element={<AdminLogs />} />

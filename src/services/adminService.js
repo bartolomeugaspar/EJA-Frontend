@@ -130,6 +130,11 @@ export const adminService = {
     return response.data
   },
 
+  getProgramById: async (id) => {
+    const response = await api.get(`/programs/${id}`)
+    return response.data
+  },
+
   createProgram: async (data) => {
     const response = await api.post('/programs', data)
     return response.data

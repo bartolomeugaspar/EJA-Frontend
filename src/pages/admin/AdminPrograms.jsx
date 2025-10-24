@@ -219,6 +219,126 @@ const AdminPrograms = () => {
           </div>
         )}
       </div>
+
+      {/* Modal de Detalhes */}
+      {showDetailsModal && selectedProgram && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full my-8">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-900">{selectedProgram.titulo}</h2>
+                <button
+                  onClick={handleCloseDetailsModal}
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                >
+                  <XCircle size={24} />
+                </button>
+              </div>
+              <div className="flex items-center gap-3 mt-3">
+                <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getTipoColor(selectedProgram.tipo)}`}>
+                  {selectedProgram.tipo}
+                </span>
+                <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedProgram.status)}`}>
+                  {selectedProgram.status}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-6 max-h-[60vh] overflow-y-auto">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-2">Descrição:</h3>
+                  <p className="text-gray-700">{selectedProgram.descricao}</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">Data de Início:</h3>
+                    <div className="flex items-center text-gray-700">
+                      <Calendar size={16} className="mr-2" />
+                      {new Date(selectedProgram.data_inicio).toLocaleDateString('pt-BR')}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">Data de Fim:</h3>
+                    <div className="flex items-center text-gray-700">
+                      <Calendar size={16} className="mr-2" />
+                      {selectedProgram.data_fim ? new Date(selectedProgram.data_fim).toLocaleDateString('pt-BR') : 'Não definida'}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700 mb-2">Local:</h3>
+                  <div className="flex items-center text-gray-700">
+                    <MapPin size={16} className="mr-2" />
+                    {selectedProgram.local}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">Vagas:</h3>
+                    <div className="flex items-center text-gray-700">
+                      <Users size={16} className="mr-2" />
+                      {selectedProgram.vagas} vagas
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">Vagas Disponíveis:</h3>
+                    <div className="flex items-center text-gray-700">
+                      <Users size={16} className="mr-2" />
+                      {selectedProgram.vagas_disponiveis || 0} disponíveis
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 flex items-center justify-end gap-3">
+              <button
+                onClick={handleCloseDetailsModal}
+                className="btn bg-gray-200 text-gray-700 hover:bg-gray-300"
+              >
+                Fechar
+              </button>
+              <button
+                onClick={() => {
+                  handleCloseDetailsModal()
+                  navigate(`/admin/programs/edit/${selectedProgram.id}`)
+                }}
+                className="btn btn-primary inline-flex items-center gap-2"
+              >
+                <Edit size={18} />
+                Editar Programa
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed top-4 right-4 z-50 transition-all duration-300 ease-out transform translate-x-0 opacity-100">
+          <div className={`flex items-center gap-3 px-6 py-4 rounded-lg shadow-xl border-2 min-w-[300px] ${
+            toast.type === 'success' 
+              ? 'bg-green-50 border-green-500 text-green-900' 
+              : 'bg-red-50 border-red-500 text-red-900'
+          }`}>
+            <div className={`flex-shrink-0 ${
+              toast.type === 'success' ? 'text-green-500' : 'text-red-500'
+            }`}>
+              {toast.type === 'success' ? (
+                <CheckCircle size={24} />
+              ) : (
+                <XCircle size={24} />
+              )}
+            </div>
+            <p className="font-medium">{toast.message}</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
