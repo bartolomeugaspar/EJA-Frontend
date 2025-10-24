@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { adminService } from '../../services/adminService'
 import { Save, Globe, Shield, Bell, AlertCircle, CheckCircle } from 'lucide-react'
 
 const AdminSettings = () => {
@@ -11,8 +12,36 @@ const AdminSettings = () => {
     emailNotifications: true,
     smsNotifications: false,
   })
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
+
+  useEffect(() => {
+    loadSettings()
+  }, [])
+
+  const loadSettings = async () => {
+    try {
+      setLoading(true)
+      const response = await adminService.getSettings()
+      const data = response.data
+      
+      setSettings({
+        siteName: data.site_name || '',
+        siteEmail: data.site_email || '',
+        siteUrl: data.site_url || '',
+        maintenanceMode: data.maintenance_mode || false,
+        allowRegistration: data.allow_registration !== false,
+        emailNotifications: data.email_notifications !== false,
+        smsNotifications: data.sms_notifications || false,
+      })
+    } catch (error) {
+      console.error('Erro ao carregar configurações:', error)
+      showToast('error', 'Erro ao carregar configurações')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const showToast = (type, message) => {
     setToast({ show: true, type, message })
@@ -31,22 +60,35 @@ const AdminSettings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
+    setSaving(true)
     
     try {
-      // TODO: Conectar ao backend
-      console.log('Salvando configurações:', settings)
+      const payload = {
+        site_name: settings.siteName,
+        site_email: settings.siteEmail,
+        site_url: settings.siteUrl,
+        maintenance_mode: settings.maintenanceMode,
+        allow_registration: settings.allowRegistration,
+        email_notifications: settings.emailNotifications,
+        sms_notifications: settings.smsNotifications,
+      }
       
-      // Simulação de salvamento
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
+      await adminService.updateSettings(payload)
       showToast('success', 'Configurações salvas com sucesso!')
     } catch (error) {
       console.error('Erro ao salvar configurações:', error)
       showToast('error', 'Erro ao salvar configurações')
     } finally {
-      setLoading(false)
+      setSaving(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+      </div>
+    )
   }
 
   return (
@@ -160,63 +202,16 @@ const AdminSettings = () => {
           </div>
         </div>
 
-        {/* Notificações */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <Bell className="text-green-600" size={20} />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">Notificações</h2>
-              <p className="text-sm text-gray-600">Configure as notificações do sistema</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div>
-                <p className="font-medium text-gray-900">Notificações por E-mail</p>
-                <p className="text-sm text-gray-600">Receba alertas importantes por e-mail</p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="emailNotifications"
-                  checked={settings.emailNotifications}
-                  onChange={handleChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div>
-                <p className="font-medium text-gray-900">Notificações por SMS</p>
-                <p className="text-sm text-gray-600">Receba alertas críticos por SMS</p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="smsNotifications"
-                  checked={settings.smsNotifications}
-                  onChange={handleChange}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-              </label>
-            </div>
-          </div>
-        </div>
+       
 
         {/* Botão Salvar */}
         <div className="flex justify-end">
           <button
             type="submit"
-            disabled={loading}
+            disabled={saving}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? (
+            {saving ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                 Salvando...
