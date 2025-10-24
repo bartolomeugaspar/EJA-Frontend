@@ -5,7 +5,7 @@ const Sidebar = () => {
   const location = useLocation()
 
   const menuItems = [
-    { path: '/dashboard', icon: Home, label: 'Dashboard' },
+    { path: '/dashboard', icon: Home, label: 'Dashboard', exact: true },
     { path: '/dashboard/profile', icon: User, label: 'Perfil' },
     { path: '/dashboard/programs', icon: Calendar, label: 'Meus Programas' },
     { path: '/dashboard/articles', icon: BookOpen, label: 'Artigos Salvos' },
@@ -14,24 +14,27 @@ const Sidebar = () => {
   ]
 
   return (
-    <aside className="w-64 bg-white shadow-sm min-h-[calc(100vh-64px)]">
+    <aside className="w-64 bg-white shadow-sm min-h-[calc(100vh-64px)] sticky top-0">
       <nav className="p-4">
         <ul className="space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon
-            const isActive = location.pathname === item.path
+            const isActive = item.exact 
+              ? location.pathname === item.path
+              : location.pathname.startsWith(item.path)
 
             return (
               <li key={item.path}>
                 <Link
                   to={item.path}
+                  onClick={() => console.log('Navegando para:', item.path)}
                   className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition ${
                     isActive
-                      ? 'bg-primary-50 text-primary-600 font-medium'
+                      ? 'bg-yellow-50 text-yellow-700 font-medium shadow-sm'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <Icon size={20} />
+                  <Icon size={20} className={isActive ? 'text-yellow-600' : 'text-gray-500'} />
                   <span>{item.label}</span>
                 </Link>
               </li>

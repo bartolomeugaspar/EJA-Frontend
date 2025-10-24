@@ -19,8 +19,18 @@ export const useAuthStore = create((set) => ({
       })
       return response
     } catch (error) {
+      let errorMessage = 'Erro ao fazer login'
+      
+      if (error.code === 'ERR_NETWORK') {
+        errorMessage = 'Não foi possível conectar ao servidor. Verifique se o backend está rodando.'
+      } else if (error.response?.status === 401) {
+        errorMessage = 'E-mail ou senha incorretos. Verifique suas credenciais.'
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message
+      }
+      
       set({
-        error: error.response?.data?.message || 'Erro ao fazer login',
+        error: errorMessage,
         isLoading: false,
       })
       throw error
@@ -39,8 +49,29 @@ export const useAuthStore = create((set) => ({
       })
       return response
     } catch (error) {
+      console.error('Erro completo de registro:', error)
+      console.error('Resposta do servidor:', error.response?.data)
+      
+      let errorMessage = 'Erro ao registrar'
+      
+      if (error.code === 'ERR_NETWORK') {
+        errorMessage = 'Não foi possível conectar ao servidor. Verifique se o backend está rodando.'
+      } else if (error.response?.status === 400) {
+        // Mostrar detalhes específicos do erro 400
+        const details = error.response.data
+        if (details.errors && Array.isArray(details.errors)) {
+          errorMessage = details.errors.map(err => err.msg).join(', ')
+        } else {
+          errorMessage = details.message || 'Dados inválidos. Verifique os campos.'
+        }
+      } else if (error.response?.status === 409) {
+        errorMessage = 'Este e-mail já está cadastrado. Tente fazer login.'
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message
+      }
+      
       set({
-        error: error.response?.data?.message || 'Erro ao registrar',
+        error: errorMessage,
         isLoading: false,
       })
       throw error

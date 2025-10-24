@@ -136,6 +136,7 @@ const Register = () => {
                       name="data_nascimento"
                       type="date"
                       required
+                      max={new Date().toISOString().split('T')[0]}
                       value={formData.data_nascimento}
                       onChange={handleChange}
                       className="input pl-10"

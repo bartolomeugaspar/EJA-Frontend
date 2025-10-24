@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import { Mail, Lock, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
@@ -6,11 +6,19 @@ import loginImage from '../assets/image1.jpeg'
 
 const Login = () => {
   const navigate = useNavigate()
-  const { login, isLoading, error, clearError } = useAuthStore()
+  const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore()
   const [formData, setFormData] = useState({
     email: '',
     senha: '',
   })
+
+  // Redirecionar se já estiver autenticado (apenas na montagem inicial)
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('Usuário já autenticado, redirecionando...')
+      navigate('/dashboard', { replace: true })
+    }
+  }, []) // Removido isAuthenticated das dependências para evitar loop
 
   const handleChange = (e) => {
     setFormData({
@@ -22,11 +30,21 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log('Iniciando processo de login...')
+    
     try {
-      await login(formData)
-      navigate('/dashboard')
+      const result = await login(formData)
+      console.log('Login bem-sucedido! Resultado:', result)
+      console.log('Redirecionando para dashboard...')
+      
+      // Pequeno delay para garantir que o estado foi atualizado
+      setTimeout(() => {
+        navigate('/dashboard', { replace: true })
+      }, 100)
     } catch (err) {
-      // Error is handled by the store
+      console.error('Erro no login:', err)
+      console.error('Status:', err.response?.status)
+      console.error('Mensagem:', err.response?.data)
     }
   }
 
@@ -99,7 +117,7 @@ const Login = () => {
                   id="remember"
                   name="remember"
                   type="checkbox"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded cursor-pointer"
+                  className="h-4 w-4 text-prim-600 focus:ring-primary-500 border-gray-300 rounded cursor-pointer"
                 />
                 <label htmlFor="remember" className="ml-2 block text-sm text-gray-700 cursor-pointer">
                   Lembrar por 30 dias
