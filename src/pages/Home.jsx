@@ -470,12 +470,12 @@ const Home = () => {
 
           {/* Carrossel Infinito Contínuo */}
           <div className="relative overflow-hidden">
-            <div className="flex gap-4 md:gap-6" style={{ animation: 'scroll 10s linear infinite' }}>
+            <div className="flex gap-4 md:gap-6" style={{ animation: 'scroll 40s linear infinite' }}>
               {/* Duplicamos os depoimentos para criar efeito infinito */}
               {[...testimonials, ...testimonials].map((testimonial, index) => (
                 <div 
                   key={index} 
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-4 md:p-5 flex flex-col min-w-[250px] md:min-w-[280px] flex-shrink-0"
+                  className="bg-white rounded-2xl shadow-lg transition-none p-4 md:p-5 flex flex-col min-w-[280px] md:min-w-[320px] flex-shrink-0"
                 >
                   {/* Imagem */}
                   <div className="flex justify-center mb-4">
