@@ -273,9 +273,9 @@ const Home = () => {
               return (
                 <div 
                   key={index} 
-                  className={`bg-white rounded-xl md:rounded-2xl p-5 sm:p-6 md:p-8 border-2 ${service.borderColor} hover:shadow-2xl hover:scale-105 transition-all duration-300 group`}
+                  className={`bg-white rounded-xl md:rounded-2xl p-5 sm:p-6 md:p-8 border-2 ${service.borderColor} hover:shadow-lg transition-shadow duration-200`}
                 >
-                  <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ${service.color} rounded-lg md:rounded-xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ${service.color} rounded-lg md:rounded-xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 shadow-md`}>
                     <Icon className="text-white" size={24} />
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">{service.title}</h3>

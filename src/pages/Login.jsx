@@ -14,14 +14,6 @@ const Login = () => {
   const [showToast, setShowToast] = useState(false)
   const [successToast, setSuccessToast] = useState(false)
 
-  // Redirecionar se já estiver autenticado (apenas na montagem inicial)
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      console.log('Usuário já autenticado, redirecionando...')
-      const redirectPath = user.role === 'admin' ? '/admin' : '/dashboard'
-      navigate(redirectPath, { replace: true })
-    }
-  }, [])    
   useEffect(() => {
     if (error) {
       console.log('Erro detectado, mostrando toast:', error)
