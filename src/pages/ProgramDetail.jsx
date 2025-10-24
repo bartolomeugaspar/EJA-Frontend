@@ -184,12 +184,24 @@ const ProgramDetail = () => {
               <h3 className="text-xl font-bold text-gray-900 mb-6">Inscreva-se</h3>
 
               {enrolled ? (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-6 text-center mb-6">
-                  <CheckCircle className="mx-auto text-green-600 mb-3" size={48} />
-                  <p className="text-green-800 font-semibold mb-2">Inscrição Realizada!</p>
-                  <p className="text-green-700 text-sm">
-                    Você será redirecionado para seus programas...
+                <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-300 rounded-xl p-8 text-center mb-6 shadow-lg">
+                  <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg animate-bounce">
+                    <CheckCircle className="text-white" size={40} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-green-900 mb-2">Inscrição Realizada!</h3>
+                  <p className="text-green-800 font-medium mb-4">
+                    Parabéns! Você foi inscrito com sucesso no programa.
                   </p>
+                  <div className="bg-white/60 backdrop-blur-sm rounded-lg p-4 mb-4">
+                    <p className="text-sm text-green-700">
+                      ✓ Confirmação enviada para seu e-mail<br/>
+                      ✓ Acesse "Meus Programas" para mais detalhes
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-sm text-green-600">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
+                    <span>Redirecionando...</span>
+                  </div>
                 </div>
               ) : (
                 <>

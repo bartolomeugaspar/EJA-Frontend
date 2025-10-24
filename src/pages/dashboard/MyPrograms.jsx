@@ -1,28 +1,41 @@
 import { useState } from 'react'
-import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, X, AlertCircle } from 'lucide-react'
 import { useMyPrograms } from '../../hooks/usePrograms'
 
 const MyPrograms = () => {
   const [activeTab, setActiveTab] = useState('inscritos')
   const { programs, loading, error, enrollProgram, cancelEnrollment } = useMyPrograms()
+  const [toast, setToast] = useState({ show: false, type: '', message: '' })
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [programToCancel, setProgramToCancel] = useState(null)
+
+  const showToast = (type, message) => {
+    setToast({ show: true, type, message })
+    setTimeout(() => setToast({ show: false, type: '', message: '' }), 4000)
+  }
 
   const handleEnroll = async (programId) => {
     try {
       await enrollProgram(programId)
-      alert('Inscrição realizada com sucesso!')
+      showToast('success', 'Inscrição realizada com sucesso!')
     } catch (err) {
-      alert(err.response?.data?.message || 'Erro ao realizar inscrição')
+      showToast('error', err.response?.data?.message || 'Erro ao realizar inscrição')
     }
   }
 
-  const handleCancel = async (programId) => {
-    if (confirm('Deseja realmente cancelar a inscrição?')) {
-      try {
-        await cancelEnrollment(programId)
-        alert('Inscrição cancelada com sucesso!')
-      } catch (err) {
-        alert(err.response?.data?.message || 'Erro ao cancelar inscrição')
-      }
+  const handleCancelClick = (programId) => {
+    setProgramToCancel(programId)
+    setShowCancelModal(true)
+  }
+
+  const handleCancelConfirm = async () => {
+    try {
+      await cancelEnrollment(programToCancel)
+      setShowCancelModal(false)
+      setProgramToCancel(null)
+      showToast('success', 'Inscrição cancelada com sucesso!')
+    } catch (err) {
+      showToast('error', err.response?.data?.message || 'Erro ao cancelar inscrição')
     }
   }
 
