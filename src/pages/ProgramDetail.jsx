@@ -11,6 +11,7 @@ const ProgramDetail = () => {
   const [error, setError] = useState('')
   const [enrolling, setEnrolling] = useState(false)
   const [enrolled, setEnrolled] = useState(false)
+  const [alreadyEnrolled, setAlreadyEnrolled] = useState(false)
 
   useEffect(() => {
     const fetchProgram = async () => {
@@ -19,6 +20,10 @@ const ProgramDetail = () => {
         console.log('Resposta da API:', response.data)
         // O backend retorna { success: true, data: {...program} }
         setProgram(response.data.data || response.data.program)
+        
+        // Verificar se já está inscrito
+        const enrolledPrograms = JSON.parse(localStorage.getItem('enrolledPrograms') || '[]')
+        setAlreadyEnrolled(enrolledPrograms.includes(id))
       } catch (err) {
         setError('Erro ao carregar detalhes do programa')
         console.error('Erro ao buscar programa:', err)
@@ -31,10 +36,21 @@ const ProgramDetail = () => {
   }, [id])
 
   const handleEnroll = async () => {
+    // Verificar se já está inscrito (localStorage para usuários não autenticados)
+    const enrolledPrograms = JSON.parse(localStorage.getItem('enrolledPrograms') || '[]')
+    if (enrolledPrograms.includes(id)) {
+      setError('Você já está inscrito neste programa')
+      return
+    }
+
     setEnrolling(true)
     try {
       // Fazer a inscrição no programa
       await api.post(`/programs/${id}/enroll`)
+      
+      // Salvar inscrição no localStorage
+      enrolledPrograms.push(id)
+      localStorage.setItem('enrolledPrograms', JSON.stringify(enrolledPrograms))
       
       // Atualizar o número de vagas localmente
       setProgram(prevProgram => ({
@@ -255,7 +271,7 @@ const ProgramDetail = () => {
 
                   <button
                     onClick={handleEnroll}
-                    disabled={enrolling || program.status !== 'ativo' || (program.vagas !== null && program.vagas <= 0)}
+                    disabled={enrolling || alreadyEnrolled || program.status !== 'ativo' || (program.vagas !== null && program.vagas <= 0)}
                     className="w-full btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {enrolling ? (
@@ -263,6 +279,8 @@ const ProgramDetail = () => {
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                         <span>Inscrevendo...</span>
                       </div>
+                    ) : alreadyEnrolled ? (
+                      'Já Inscrito'
                     ) : program.vagas !== null && program.vagas <= 0 ? (
                       'Vagas Esgotadas'
                     ) : program.status === 'ativo' ? (
