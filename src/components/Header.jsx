@@ -13,12 +13,17 @@ const Header = () => {
     setIsMenuOpen(false)
   }
 
+  const handleHomeClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setIsMenuOpen(false)
+  }
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="container-custom">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" onClick={handleHomeClick} className="flex items-center space-x-3">
             <img 
               src={logo} 
               alt="EJA Logo" 
@@ -31,7 +36,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-yellow-600 transition font-medium">
+            <Link to="/" onClick={handleHomeClick} className="text-gray-700 hover:text-yellow-600 transition font-medium">
               Início
             </Link>
             <Link to="/blog" className="text-gray-700 hover:text-yellow-600 transition font-medium">
@@ -70,7 +75,7 @@ const Header = () => {
             <div className="flex flex-col space-y-4">
               <Link
                 to="/"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleHomeClick}
                 className="text-gray-700 hover:text-primary-600 transition"
               >
                 Início
