@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Users, BookOpen, Calendar, TrendingUp, Target, Lightbulb, Award, Rocket, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowRight, Users, BookOpen, Calendar, TrendingUp, Target, Lightbulb, Award, Rocket, CheckCircle, ChevronLeft, ChevronRight, ArrowUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import image1 from '../assets/image1.jpeg'
 import image2 from '../assets/image2.jpeg'
@@ -8,6 +8,7 @@ import image4 from '../assets/image4.jpeg'
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
+  const [showScrollTop, setShowScrollTop] = useState(false)
 
   const slides = [
     {
@@ -114,6 +115,14 @@ const Home = () => {
     return () => clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length)
@@ -121,6 +130,10 @@ const Home = () => {
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
@@ -563,6 +576,17 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+          aria-label="Voltar ao topo"
+        >
+          <ArrowUp size={24} />
+        </button>
+      )}
     </div>
   )
 }
