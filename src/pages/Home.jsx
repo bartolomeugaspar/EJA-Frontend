@@ -453,53 +453,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Galeria de Momentos */}
-      <section className="py-20 bg-white">
-        <div className="container-custom">
-          <div className="text-center mb-16">
-            <span className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Galeria</span>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 mt-2">
-              Momentos EJA
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Veja alguns momentos dos nossos eventos, workshops e programas
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all">
-              <img src={image1} alt="Evento EJA" className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-white font-bold text-xl mb-2">Workshop de Empreendedorismo</h3>
-                  <p className="text-gray-200 text-sm">Capacitação prática para jovens</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all">
-              <img src={image2} alt="Mentoria EJA" className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-white font-bold text-xl mb-2">Sessões de Mentoria</h3>
-                  <p className="text-gray-200 text-sm">Acompanhamento personalizado</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all">
-              <img src={image3} alt="Networking EJA" className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-white font-bold text-xl mb-2">Eventos de Networking</h3>
-                  <p className="text-gray-200 text-sm">Conexões que transformam</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container-custom">

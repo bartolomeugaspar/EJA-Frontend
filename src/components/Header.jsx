@@ -24,7 +24,7 @@ const Header = () => {
               alt="EJA Logo" 
               className="h-12 w-12 object-cover rounded-lg"
             />
-            <span className="font-bold text-xl text-gray-900 hidden sm:block">
+            <span className="font-bold text-2xl bg-gradient-to-r from-yellow-500 to-yellow-600 bg-clip-text text-transparent hidden sm:block">
               EJA
             </span>
           </Link>
