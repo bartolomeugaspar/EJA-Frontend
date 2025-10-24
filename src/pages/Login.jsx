@@ -85,7 +85,8 @@ const Login = () => {
       console.error('Erro no login:', err)
       console.error('Status:', err.response?.status)
       console.error('Mensagem:', err.response?.data?.message)
-      return
+      // Não fazer nada - o erro já está sendo tratado pelo authStore e mostrado no toast
+      // Não tentar navegar ou fazer qualquer ação adicional
     }
   }
 
