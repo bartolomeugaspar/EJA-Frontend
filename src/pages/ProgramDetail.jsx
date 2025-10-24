@@ -73,7 +73,7 @@ const ProgramDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section com Imagem */}
-      <div className="relative h-96 bg-gradient-to-r from-primary-600 to-primary-700">
+      <div className="relative h-96 bg-gradient-to-r from-yellow-500 to-yellow-600">
         {program.imagem && (
           <>
             <img
