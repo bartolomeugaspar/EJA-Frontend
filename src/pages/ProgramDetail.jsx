@@ -12,6 +12,8 @@ const ProgramDetail = () => {
   const [enrolling, setEnrolling] = useState(false)
   const [enrolled, setEnrolled] = useState(false)
   const [alreadyEnrolled, setAlreadyEnrolled] = useState(false)
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [emailData, setEmailData] = useState({ email: '', nome: '', telefone: '' })
 
   useEffect(() => {
     const fetchProgram = async () => {
@@ -20,10 +22,6 @@ const ProgramDetail = () => {
         console.log('Resposta da API:', response.data)
         // O backend retorna { success: true, data: {...program} }
         setProgram(response.data.data || response.data.program)
-        
-        // Verificar se já está inscrito
-        const enrolledPrograms = JSON.parse(localStorage.getItem('enrolledPrograms') || '[]')
-        setAlreadyEnrolled(enrolledPrograms.includes(id))
       } catch (err) {
         setError('Erro ao carregar detalhes do programa')
         console.error('Erro ao buscar programa:', err)
@@ -35,22 +33,23 @@ const ProgramDetail = () => {
     fetchProgram()
   }, [id])
 
-  const handleEnroll = async () => {
-    // Verificar se já está inscrito (localStorage para usuários não autenticados)
-    const enrolledPrograms = JSON.parse(localStorage.getItem('enrolledPrograms') || '[]')
-    if (enrolledPrograms.includes(id)) {
-      setError('Você já está inscrito neste programa')
+  const handleEnroll = () => {
+    // Mostrar modal para pedir email
+    setShowEmailModal(true)
+  }
+
+  const handleConfirmEnroll = async () => {
+    if (!emailData.email) {
+      setError('Email é obrigatório')
       return
     }
 
     setEnrolling(true)
+    setShowEmailModal(false)
+    
     try {
-      // Fazer a inscrição no programa
-      await api.post(`/programs/${id}/enroll`)
-      
-      // Salvar inscrição no localStorage
-      enrolledPrograms.push(id)
-      localStorage.setItem('enrolledPrograms', JSON.stringify(enrolledPrograms))
+      // Fazer a inscrição no programa com email
+      await api.post(`/programs/${id}/enroll`, emailData)
       
       // Atualizar o número de vagas localmente
       setProgram(prevProgram => ({
@@ -60,6 +59,7 @@ const ProgramDetail = () => {
       }))
       
       setEnrolled(true)
+      setAlreadyEnrolled(true)
       setTimeout(() => {
         navigate('/programs')
       }, 2000)
@@ -319,6 +319,78 @@ const ProgramDetail = () => {
                 className="flex-shrink-0 text-red-600 hover:text-red-800"
               >
                 ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Email */}
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Confirmar Inscrição
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Para se inscrever, precisamos do seu email para enviar as informações do programa.
+            </p>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={emailData.email}
+                  onChange={(e) => setEmailData({...emailData, email: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="seu@email.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Nome (opcional)
+                </label>
+                <input
+                  type="text"
+                  value={emailData.nome}
+                  onChange={(e) => setEmailData({...emailData, nome: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="Seu nome"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Telefone (opcional)
+                </label>
+                <input
+                  type="tel"
+                  value={emailData.telefone}
+                  onChange={(e) => setEmailData({...emailData, telefone: e.target.value})}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="+244 900 000 000"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={handleConfirmEnroll}
+                disabled={!emailData.email}
+                className="flex-1 btn btn-primary disabled:opacity-50"
+              >
+                Confirmar Inscrição
+              </button>
+              <button
+                onClick={() => setShowEmailModal(false)}
+                className="flex-1 btn btn-secondary"
+              >
+                Cancelar
               </button>
             </div>
           </div>
