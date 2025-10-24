@@ -39,7 +39,8 @@ const ProgramDetail = () => {
       // Atualizar o número de vagas localmente
       setProgram(prevProgram => ({
         ...prevProgram,
-        vagas: prevProgram.vagas > 0 ? prevProgram.vagas - 1 : 0
+        vagas: prevProgram.vagas > 0 ? prevProgram.vagas - 1 : 0,
+        total_inscritos: (prevProgram.total_inscritos || 0) + 1
       }))
       
       setEnrolled(true)
@@ -142,7 +143,7 @@ const ProgramDetail = () => {
                 <span>{program.duracao}</span>
               </div>
             )}
-            {program.vagas && (
+            {program.vagas !== null && program.vagas !== undefined && (
               <div className="flex items-center gap-2">
                 <Users size={20} />
                 <span>{program.vagas} vagas disponíveis</span>
@@ -234,7 +235,7 @@ const ProgramDetail = () => {
                     )}
                     {program.vagas !== null && program.vagas !== undefined && (
                       <div className="flex justify-between items-center py-3 border-b border-gray-200">
-                        <span className="text-gray-600">Vagas</span>
+                        <span className="text-gray-600">Vagas Disponíveis</span>
                         <span className={`font-semibold ${
                           program.vagas === 0 ? 'text-red-600' :
                           program.vagas <= 5 ? 'text-orange-600' :
