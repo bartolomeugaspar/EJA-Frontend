@@ -26,7 +26,7 @@ const AdminSidebar = () => {
   ]
 
   return (
-    <aside className="w-64 bg-white shadow-sm min-h-[calc(100vh-73px)] sticky top-[73px]">
+    <aside className="w-full h-full bg-white shadow-sm">
       <nav className="p-4">
         <div className="mb-6">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">

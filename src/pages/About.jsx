@@ -91,67 +91,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Nossos Valores */}
-      <section className="py-20 bg-white">
-        <div className="container-custom">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">Nossos Valores</h2>
-            
-            <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Award className="text-yellow-600" size={24} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Excelência</h3>
-                  <p className="text-gray-600">
-                    Buscamos sempre a excelência em tudo que fazemos, desde a qualidade dos nossos programas 
-                    até o atendimento aos nossos membros.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Users className="text-blue-600" size={24} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Colaboração</h3>
-                  <p className="text-gray-600">
-                    Acreditamos no poder da colaboração e do networking para criar oportunidades e 
-                    impulsionar o crescimento de todos.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Lightbulb className="text-green-600" size={24} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Inovação</h3>
-                  <p className="text-gray-600">
-                    Incentivamos a criatividade e a inovação como motores de transformação e desenvolvimento.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Target className="text-purple-600" size={24} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Impacto Social</h3>
-                  <p className="text-gray-600">
-                    Comprometemo-nos a gerar impacto positivo na sociedade angolana através do empreendedorismo.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Estatísticas */}
       <section className="py-20 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white">
         <div className="container-custom">

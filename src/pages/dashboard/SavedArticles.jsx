@@ -1,44 +1,34 @@
-import { useState } from 'react'
 import { BookOpen, Calendar, User, Bookmark, Trash2, ExternalLink } from 'lucide-react'
+import { useSavedArticles } from '../../hooks/useArticles'
 
 const SavedArticles = () => {
-  const [articles, setArticles] = useState([
-    {
-      id: 1,
-      titulo: 'Como Validar Sua Ideia de Negócio',
-      resumo: 'Aprenda técnicas essenciais para validar sua ideia antes de investir tempo e dinheiro...',
-      autor: 'João Silva',
-      data_publicacao: '2024-01-15',
-      categoria: 'Empreendedorismo',
-      imagem: '/api/placeholder/400/250',
-      data_salvo: '2024-01-20'
-    },
-    {
-      id: 2,
-      titulo: '10 Erros Comuns de Startups Iniciantes',
-      resumo: 'Conheça os principais erros que startups cometem e como evitá-los...',
-      autor: 'Maria Santos',
-      data_publicacao: '2024-01-10',
-      categoria: 'Startups',
-      imagem: '/api/placeholder/400/250',
-      data_salvo: '2024-01-18'
-    },
-    {
-      id: 3,
-      titulo: 'Marketing Digital para Pequenos Negócios',
-      resumo: 'Estratégias de marketing digital acessíveis para pequenos empreendedores...',
-      autor: 'Pedro Costa',
-      data_publicacao: '2024-01-05',
-      categoria: 'Marketing',
-      imagem: '/api/placeholder/400/250',
-      data_salvo: '2024-01-15'
-    }
-  ])
+  const { articles, loading, error, unsaveArticle } = useSavedArticles()
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
     if (confirm('Deseja remover este artigo dos salvos?')) {
-      setArticles(articles.filter(article => article.id !== id))
+      try {
+        await unsaveArticle(id)
+        alert('Artigo removido com sucesso!')
+      } catch (err) {
+        alert(err.response?.data?.message || 'Erro ao remover artigo')
+      }
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+        <p className="text-red-600">{error}</p>
+      </div>
+    )
   }
 
   return (

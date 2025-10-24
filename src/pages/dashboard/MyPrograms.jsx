@@ -1,64 +1,45 @@
 import { useState } from 'react'
 import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle } from 'lucide-react'
+import { useMyPrograms } from '../../hooks/usePrograms'
 
 const MyPrograms = () => {
   const [activeTab, setActiveTab] = useState('inscritos')
+  const { programs, loading, error, enrollProgram, cancelEnrollment } = useMyPrograms()
 
-  const programs = {
-    inscritos: [
-      {
-        id: 1,
-        titulo: 'Workshop de Empreendedorismo Digital',
-        data_inicio: '2024-02-15',
-        data_fim: '2024-02-17',
-        local: 'Luanda, Angola',
-        vagas: 30,
-        status: 'confirmado',
-        progresso: 60
-      },
-      {
-        id: 2,
-        titulo: 'Programa de Aceleração de Startups',
-        data_inicio: '2024-03-01',
-        data_fim: '2024-06-01',
-        local: 'Online',
-        vagas: 20,
-        status: 'em_andamento',
-        progresso: 35
+  const handleEnroll = async (programId) => {
+    try {
+      await enrollProgram(programId)
+      alert('Inscrição realizada com sucesso!')
+    } catch (err) {
+      alert(err.response?.data?.message || 'Erro ao realizar inscrição')
+    }
+  }
+
+  const handleCancel = async (programId) => {
+    if (confirm('Deseja realmente cancelar a inscrição?')) {
+      try {
+        await cancelEnrollment(programId)
+        alert('Inscrição cancelada com sucesso!')
+      } catch (err) {
+        alert(err.response?.data?.message || 'Erro ao cancelar inscrição')
       }
-    ],
-    concluidos: [
-      {
-        id: 3,
-        titulo: 'Curso de Marketing Digital',
-        data_inicio: '2023-11-01',
-        data_fim: '2023-12-15',
-        local: 'Online',
-        vagas: 50,
-        status: 'concluido',
-        certificado: true
-      }
-    ],
-    disponiveis: [
-      {
-        id: 4,
-        titulo: 'Mentoria em Gestão Financeira',
-        data_inicio: '2024-04-10',
-        data_fim: '2024-04-12',
-        local: 'Benguela, Angola',
-        vagas: 15,
-        status: 'disponivel'
-      },
-      {
-        id: 5,
-        titulo: 'Workshop de Pitch para Investidores',
-        data_inicio: '2024-05-20',
-        data_fim: '2024-05-22',
-        local: 'Luanda, Angola',
-        vagas: 25,
-        status: 'disponivel'
-      }
-    ]
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-600"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center">
+        <p className="text-red-600">{error}</p>
+      </div>
+    )
   }
 
   const getStatusBadge = (status) => {
@@ -163,7 +144,10 @@ const MyPrograms = () => {
                 <button className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
                   Ver Detalhes
                 </button>
-                <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                <button 
+                  onClick={() => handleCancel(program.id)}
+                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                >
                   Cancelar Inscrição
                 </button>
               </div>
@@ -234,7 +218,10 @@ const MyPrograms = () => {
                   {program.vagas} vagas disponíveis
                 </div>
               </div>
-              <button className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-medium">
+              <button 
+                onClick={() => handleEnroll(program.id)}
+                className="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-medium"
+              >
                 Inscrever-se
               </button>
             </div>

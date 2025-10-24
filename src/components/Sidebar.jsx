@@ -14,7 +14,7 @@ const Sidebar = () => {
   ]
 
   return (
-    <aside className="w-64 bg-white shadow-sm min-h-[calc(100vh-64px)] sticky top-0">
+    <aside className="w-full h-full bg-white shadow-sm">
       <nav className="p-4">
         <ul className="space-y-2">
           {menuItems.map((item) => {

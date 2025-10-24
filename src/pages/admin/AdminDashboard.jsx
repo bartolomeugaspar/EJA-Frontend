@@ -104,44 +104,39 @@ const AdminDashboard = () => {
             <h2 className="text-lg font-bold text-gray-900">Novos Membros (30 dias)</h2>
             <UserPlus className="text-gray-400" size={20} />
           </div>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-                  MS
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Maria Santos</p>
-                  <p className="text-sm text-gray-600">maria@example.com</p>
-                </div>
-              </div>
-              <span className="text-sm text-gray-500">Hoje</span>
+          {stats?.recentMembers && stats.recentMembers.length > 0 ? (
+            <div className="space-y-4">
+              {stats.recentMembers.slice(0, 3).map((member, index) => {
+                const colors = ['bg-primary-600', 'bg-green-600', 'bg-purple-600']
+                const initials = member.nome_completo
+                  .split(' ')
+                  .map(n => n[0])
+                  .join('')
+                  .substring(0, 2)
+                  .toUpperCase()
+                
+                const daysAgo = Math.floor((new Date() - new Date(member.created_at)) / (1000 * 60 * 60 * 24))
+                const timeText = daysAgo === 0 ? 'Hoje' : daysAgo === 1 ? 'Ontem' : `${daysAgo} dias atrás`
+                
+                return (
+                  <div key={member.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-10 h-10 ${colors[index % colors.length]} rounded-full flex items-center justify-center text-white font-bold`}>
+                        {initials}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">{member.nome_completo}</p>
+                        <p className="text-sm text-gray-600">{member.email}</p>
+                      </div>
+                    </div>
+                    <span className="text-sm text-gray-500">{timeText}</span>
+                  </div>
+                )
+              })}
             </div>
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold">
-                  JP
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">João Pedro</p>
-                  <p className="text-sm text-gray-600">joao@example.com</p>
-                </div>
-              </div>
-              <span className="text-sm text-gray-500">Ontem</span>
-            </div>
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                  AC
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">Ana Costa</p>
-                  <p className="text-sm text-gray-600">ana@example.com</p>
-                </div>
-              </div>
-              <span className="text-sm text-gray-500">2 dias atrás</span>
-            </div>
-          </div>
+          ) : (
+            <p className="text-gray-600 text-center py-8">Nenhum novo membro recente</p>
+          )}
           <Link to="/admin/users" className="block mt-4 text-center text-primary-600 hover:text-primary-700 font-medium text-sm">
             Ver todos os usuários →
           </Link>
@@ -153,32 +148,34 @@ const AdminDashboard = () => {
             <h2 className="text-lg font-bold text-gray-900">Atividades Recentes</h2>
             <Clock className="text-gray-400" size={20} />
           </div>
-          <div className="space-y-4">
-            <div className="flex items-start space-x-3 p-4 bg-green-50 rounded-lg">
-              <CheckCircle className="text-green-600 flex-shrink-0 mt-0.5" size={20} />
-              <div>
-                <p className="font-medium text-gray-900">Novo programa criado</p>
-                <p className="text-sm text-gray-600">Workshop de Marketing Digital</p>
-                <p className="text-xs text-gray-500 mt-1">Há 2 horas</p>
-              </div>
+          {stats?.recentActivities && stats.recentActivities.length > 0 ? (
+            <div className="space-y-4">
+              {stats.recentActivities.slice(0, 3).map((activity, index) => {
+                const activityConfig = {
+                  program_created: { icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-50', label: 'Novo programa criado' },
+                  article_published: { icon: AlertCircle, color: 'text-blue-600', bg: 'bg-blue-50', label: 'Artigo publicado' },
+                  enrollment: { icon: Users, color: 'text-purple-600', bg: 'bg-purple-50', label: 'Nova inscrição' },
+                  default: { icon: AlertCircle, color: 'text-gray-600', bg: 'bg-gray-50', label: 'Atividade' }
+                }
+                
+                const config = activityConfig[activity.type] || activityConfig.default
+                const Icon = config.icon
+                
+                return (
+                  <div key={index} className={`flex items-start space-x-3 p-4 ${config.bg} rounded-lg`}>
+                    <Icon className={`${config.color} flex-shrink-0 mt-0.5`} size={20} />
+                    <div>
+                      <p className="font-medium text-gray-900">{config.label}</p>
+                      <p className="text-sm text-gray-600">{activity.description}</p>
+                      <p className="text-xs text-gray-500 mt-1">{activity.timeAgo}</p>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-            <div className="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg">
-              <AlertCircle className="text-blue-600 flex-shrink-0 mt-0.5" size={20} />
-              <div>
-                <p className="font-medium text-gray-900">Artigo publicado</p>
-                <p className="text-sm text-gray-600">10 Dicas para Empreendedores</p>
-                <p className="text-xs text-gray-500 mt-1">Há 5 horas</p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3 p-4 bg-purple-50 rounded-lg">
-              <Users className="text-purple-600 flex-shrink-0 mt-0.5" size={20} />
-              <div>
-                <p className="font-medium text-gray-900">Nova inscrição</p>
-                <p className="text-sm text-gray-600">Maria Santos - Curso de Empreendedorismo</p>
-                <p className="text-xs text-gray-500 mt-1">Há 1 dia</p>
-              </div>
-            </div>
-          </div>
+          ) : (
+            <p className="text-gray-600 text-center py-8">Nenhuma atividade recente</p>
+          )}
         </div>
       </div>
 
