@@ -33,14 +33,22 @@ const ProgramDetail = () => {
   const handleEnroll = async () => {
     setEnrolling(true)
     try {
-      // Aqui você pode adicionar a lógica de inscrição
-      // await api.post(`/programs/${id}/enroll`)
+      // Fazer a inscrição no programa
+      await api.post(`/programs/${id}/enroll`)
+      
+      // Atualizar o número de vagas localmente
+      setProgram(prevProgram => ({
+        ...prevProgram,
+        vagas: prevProgram.vagas > 0 ? prevProgram.vagas - 1 : 0
+      }))
+      
       setEnrolled(true)
       setTimeout(() => {
-        navigate('/dashboard/programs')
+        navigate('/programs')
       }, 2000)
     } catch (err) {
-      setError('Erro ao se inscrever no programa')
+      setError(err.response?.data?.message || 'Erro ao se inscrever no programa')
+      console.error('Erro ao se inscrever:', err)
     } finally {
       setEnrolling(false)
     }
@@ -224,10 +232,16 @@ const ProgramDetail = () => {
                         <span className="font-semibold text-gray-900">{program.duracao}</span>
                       </div>
                     )}
-                    {program.vagas && (
+                    {program.vagas !== null && program.vagas !== undefined && (
                       <div className="flex justify-between items-center py-3 border-b border-gray-200">
                         <span className="text-gray-600">Vagas</span>
-                        <span className="font-semibold text-gray-900">{program.vagas}</span>
+                        <span className={`font-semibold ${
+                          program.vagas === 0 ? 'text-red-600' :
+                          program.vagas <= 5 ? 'text-orange-600' :
+                          'text-gray-900'
+                        }`}>
+                          {program.vagas === 0 ? 'Esgotadas' : program.vagas}
+                        </span>
                       </div>
                     )}
                     {program.local && (
@@ -240,7 +254,7 @@ const ProgramDetail = () => {
 
                   <button
                     onClick={handleEnroll}
-                    disabled={enrolling || program.status !== 'ativo'}
+                    disabled={enrolling || program.status !== 'ativo' || (program.vagas !== null && program.vagas <= 0)}
                     className="w-full btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {enrolling ? (
@@ -248,6 +262,8 @@ const ProgramDetail = () => {
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
                         <span>Inscrevendo...</span>
                       </div>
+                    ) : program.vagas !== null && program.vagas <= 0 ? (
+                      'Vagas Esgotadas'
                     ) : program.status === 'ativo' ? (
                       'Inscrever-se Agora'
                     ) : program.status === 'em_breve' ? (
@@ -266,6 +282,29 @@ const ProgramDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast de Erro */}
+      {error && program && (
+        <div className="fixed bottom-4 right-4 left-4 sm:left-auto z-50 max-w-md animate-slide-in">
+          <div className="bg-red-50 border-2 border-red-400 rounded-xl shadow-2xl p-4">
+            <div className="flex items-start gap-3">
+              <div className="flex-shrink-0 w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                <AlertCircle className="text-white" size={24} />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-red-900 mb-1">Erro ao se inscrever</h3>
+                <p className="text-sm text-red-800">{error}</p>
+              </div>
+              <button
+                onClick={() => setError('')}
+                className="flex-shrink-0 text-red-600 hover:text-red-800"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

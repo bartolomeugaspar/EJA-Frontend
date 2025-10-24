@@ -28,11 +28,12 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Só redirecionar para login se for erro 401 E não for uma tentativa de login/registro
+    // Só redirecionar para login se for erro 401 E não for uma tentativa de login/registro/inscrição
     const isAuthEndpoint = error.config?.url?.includes('/auth/login') || 
                           error.config?.url?.includes('/auth/register')
+    const isPublicEndpoint = error.config?.url?.includes('/enroll')
     
-    if (error.response?.status === 401 && !isAuthEndpoint) {
+    if (error.response?.status === 401 && !isAuthEndpoint && !isPublicEndpoint) {
       // Token inválido ou expirado em requisições autenticadas
       localStorage.removeItem('token')
       localStorage.removeItem('user')
