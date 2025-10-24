@@ -78,7 +78,8 @@ function App() {
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
-        <Route path="users" element={<AdminUsers />} />
+        <Route path="members" element={<AdminUsers key="members" filterRole="member" />} />
+        <Route path="users" element={<AdminUsers key="users" />} />
         <Route path="articles" element={<AdminArticles />} />
         <Route path="programs" element={<AdminPrograms />} />
         <Route path="contacts" element={<AdminContacts />} />

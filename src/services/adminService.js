@@ -18,6 +18,11 @@ export const adminService = {
     return response.data
   },
 
+  createUser: async (data) => {
+    const response = await api.post('/auth/register', data)
+    return response.data
+  },
+
   updateUser: async (id, data) => {
     const response = await api.put(`/users/${id}`, data)
     return response.data
@@ -35,6 +40,52 @@ export const adminService = {
 
   getUserStats: async () => {
     const response = await api.get('/users/stats')
+    return response.data
+  },
+
+  // Membros
+  getMembers: async (params) => {
+    const response = await api.get('/members', { params })
+    return response.data
+  },
+
+  getMemberById: async (id) => {
+    const response = await api.get(`/members/${id}`)
+    return response.data
+  },
+
+  createMember: async (data) => {
+    const response = await api.post('/members', data)
+    return response.data
+  },
+
+  updateMember: async (id, data) => {
+    const response = await api.put(`/members/${id}`, data)
+    return response.data
+  },
+
+  deleteMember: async (id) => {
+    const response = await api.delete(`/members/${id}`)
+    return response.data
+  },
+
+  toggleMemberStatus: async (id) => {
+    const response = await api.patch(`/members/${id}/toggle-status`)
+    return response.data
+  },
+
+  approveMember: async (id) => {
+    const response = await api.patch(`/members/${id}/approve`)
+    return response.data
+  },
+
+  rejectMember: async (id, motivo) => {
+    const response = await api.patch(`/members/${id}/reject`, { motivo })
+    return response.data
+  },
+
+  getMemberStats: async () => {
+    const response = await api.get('/members/stats')
     return response.data
   },
 

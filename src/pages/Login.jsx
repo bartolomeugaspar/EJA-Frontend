@@ -1,30 +1,52 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
-import { Mail, Lock, AlertCircle, ArrowRight, CheckCircle } from 'lucide-react'
+import { Mail, Lock, AlertCircle, ArrowRight, CheckCircle, X } from 'lucide-react'
 import loginImage from '../assets/image1.jpeg'
 
 const Login = () => {
   const navigate = useNavigate()
-  const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore()
+  const { login, isLoading, error, clearError, isAuthenticated, user } = useAuthStore()
   const [formData, setFormData] = useState({
     email: '',
     senha: '',
   })
+  const [showToast, setShowToast] = useState(false)
+  const [successToast, setSuccessToast] = useState(false)
 
   // Redirecionar se já estiver autenticado (apenas na montagem inicial)
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
       console.log('Usuário já autenticado, redirecionando...')
-      navigate('/dashboard', { replace: true })
+      const redirectPath = user.role === 'admin' ? '/admin' : '/dashboard'
+      navigate(redirectPath, { replace: true })
     }
-  }, []) // Removido isAuthenticated das dependências para evitar loop
+  }, [])    
+  useEffect(() => {
+    if (error) {
+      setShowToast(true)
+      // Auto-fechar após 8 segundos (mais tempo para contas desativadas)
+      const timer = setTimeout(() => {
+        setShowToast(false)
+        clearError()
+      }, 8000)
+      return () => clearTimeout(timer)
+    }
+  }, [error])
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     })
+    if (error) {
+      clearError()
+      setShowToast(false)
+    }
+  }
+
+  const handleCloseToast = () => {
+    setShowToast(false)
     clearError()
   }
 
@@ -34,17 +56,36 @@ const Login = () => {
     
     try {
       const result = await login(formData)
-      console.log('Login bem-sucedido! Resultado:', result)
-      console.log('Redirecionando para dashboard...')
       
-      // Pequeno delay para garantir que o estado foi atualizado
+      // Se chegou aqui, o login foi bem-sucedido
+      console.log('Login bem-sucedido! Resultado:', result)
+      
+      // Verificar se o login foi realmente bem-sucedido
+      if (!result || !result.data?.user) {
+        console.error('Login falhou - sem dados de usuário')
+        return
+      }
+      
+      // Mostrar toast de sucesso
+      setSuccessToast(true)
+      
+      // Redirecionar baseado na role do usuário
+      const userRole = result.data.user.role
+      const redirectPath = userRole === 'admin' ? '/admin' : '/dashboard'
+      
+      console.log('Role do usuário:', userRole)
+      console.log('Redirecionando para:', redirectPath)
+      
+      // Aguardar 1 segundo para mostrar o toast antes de redirecionar
       setTimeout(() => {
-        navigate('/dashboard', { replace: true })
-      }, 100)
+        navigate(redirectPath, { replace: true })
+      }, 2000)
     } catch (err) {
+      // Erro capturado - usuário inativo, senha errada, etc.
       console.error('Erro no login:', err)
       console.error('Status:', err.response?.status)
-      console.error('Mensagem:', err.response?.data)
+      console.error('Mensagem:', err.response?.data?.message)
+      return
     }
   }
 
@@ -62,16 +103,6 @@ const Login = () => {
         </div>
 
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-6 border border-white/20">
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
-                <p className="text-sm text-red-700 font-medium">{error}</p>
-              </div>
-            </div>
-          )}
-
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
@@ -167,6 +198,106 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast de Sucesso */}
+      {successToast && (
+        <div className="fixed top-4 right-4 z-50 max-w-md animate-slide-in">
+          <div className="rounded-xl shadow-2xl border-2 bg-green-50 border-green-400 overflow-hidden">
+            <div className="p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 text-green-600">
+                  <CheckCircle size={24} />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-base mb-1 text-green-900">
+                    Login realizado com sucesso!
+                  </h3>
+                  <p className="text-sm text-green-800">
+                    Redirecionando para o painel...
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast de Erro */}
+      {showToast && error && (
+        <div className="fixed top-4 right-4 z-50 max-w-md animate-slide-in">
+          <div className={`rounded-xl shadow-2xl border-2 overflow-hidden ${
+            error.includes('desativada') || error.includes('inativa')
+              ? 'bg-orange-50 border-orange-400'
+              : 'bg-red-50 border-red-400'
+          }`}>
+            <div className="p-4">
+              <div className="flex items-start gap-3">
+                <div className={`flex-shrink-0 ${
+                  error.includes('desativada') || error.includes('inativa')
+                    ? 'text-orange-600'
+                    : 'text-red-600'
+                }`}>
+                  <AlertCircle size={24} />
+                </div>
+                <div className="flex-1">
+                  <h3 className={`font-bold text-base mb-1 ${
+                    error.includes('desativada') || error.includes('inativa')
+                      ? 'text-orange-900'
+                      : 'text-red-900'
+                  }`}>
+                    {error.includes('desativada') || error.includes('inativa') 
+                      ? '⚠️ Conta Desativada' 
+                      : 'Erro ao fazer login, credenciais inválidas'
+                    }
+                  </h3>
+                  <p className={`text-sm mb-2 ${
+                    error.includes('desativada') || error.includes('inativa')
+                      ? 'text-orange-800'
+                      : 'text-red-800'
+                  }`}>
+                    {error}
+                  </p>
+                  
+                  {(error.includes('desativada') || error.includes('inativa')) && (
+                    <div className="mt-3 pt-3 border-t border-orange-300 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-orange-600">📧</span>
+                        <a 
+                          href="mailto:quetaboost@gmail.com" 
+                          className="text-sm text-orange-700 hover:text-orange-900 underline font-medium"
+                        >
+                          quetaboost@gmail.com
+                        </a>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-orange-600">📞</span>
+                        <a 
+                          href="https://wa.me/244954931747" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-sm text-orange-700 hover:text-orange-900 underline font-medium"
+                        >
+                          +244 954 931 747 (WhatsApp)
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <button
+                  onClick={handleCloseToast}
+                  className={`flex-shrink-0 hover:opacity-70 transition-opacity ${
+                    error.includes('desativada') || error.includes('inativa')
+                      ? 'text-orange-600'
+                      : 'text-red-600'
+                  }`}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

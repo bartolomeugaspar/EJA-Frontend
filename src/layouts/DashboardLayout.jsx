@@ -1,8 +1,16 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
+import { useAuthStore } from '../store/authStore'
 import DashboardHeader from '../components/DashboardHeader'
 import Sidebar from '../components/Sidebar'
 
 const DashboardLayout = () => {
+  const { user } = useAuthStore()
+
+  // Se for admin, redirecionar para /admin
+  if (user?.role === 'admin') {
+    return <Navigate to="/admin" replace />
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header Fixo */}

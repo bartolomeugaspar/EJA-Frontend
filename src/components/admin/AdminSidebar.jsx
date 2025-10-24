@@ -1,4 +1,7 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { createPortal } from 'react-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
 import {
   LayoutDashboard,
   Users,
@@ -9,14 +12,31 @@ import {
   BarChart3,
   Settings,
   FileText,
+  LogOut,
+  X,
+  AlertTriangle,
 } from 'lucide-react'
 
 const AdminSidebar = () => {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { logout } = useAuthStore()
+  const [showLogoutToast, setShowLogoutToast] = useState(false)
+
+  const handleLogout = () => {
+    setShowLogoutToast(true)
+    
+    // Aguardar 2 segundos para mostrar o toast
+    setTimeout(() => {
+      logout()
+      navigate('/login')
+    }, 2000)
+  }
 
   const menuItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-    { path: '/admin/users', icon: Users, label: 'Usuários' },
+    { path: '/admin/members', icon: Users, label: 'Membros' },
+    { path: '/admin/users', icon: Shield, label: 'Usuários' },
     { path: '/admin/articles', icon: BookOpen, label: 'Artigos' },
     { path: '/admin/programs', icon: Calendar, label: 'Programas' },
     { path: '/admin/contacts', icon: MessageSquare, label: 'Mensagens' },
@@ -26,8 +46,8 @@ const AdminSidebar = () => {
   ]
 
   return (
-    <aside className="w-full h-full bg-white shadow-sm">
-      <nav className="p-4">
+    <aside className="w-full h-full bg-white shadow-sm flex flex-col">
+        <nav className="flex-1 p-4 overflow-y-auto">
         <div className="mb-6">
           <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
             Menu Principal
@@ -75,6 +95,41 @@ const AdminSidebar = () => {
           </button>
         </div>
       </nav>
+
+      {/* Footer com Logout */}
+      <div className="border-t border-gray-200 p-4">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-all font-medium"
+        >
+          <LogOut size={20} />
+          <span>Sair</span>
+        </button>
+      </div>
+
+      {/* Toast de Logout - Usando Portal para renderizar no body */}
+      {showLogoutToast && createPortal(
+        <div className="fixed top-4 right-4 z-[9999] max-w-md animate-slide-in">
+          <div className="rounded-xl shadow-2xl border-2 bg-blue-50 border-blue-400 overflow-hidden">
+            <div className="p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 text-blue-600">
+                  <LogOut size={24} />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-base mb-1 text-blue-900">
+                    Logout realizado com sucesso!
+                  </h3>
+                  <p className="text-sm text-blue-800">
+                    Até breve! Redirecionando...
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </aside>
   )
 }

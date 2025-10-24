@@ -23,10 +23,11 @@ export const useAuthStore = create((set) => ({
       
       if (error.code === 'ERR_NETWORK') {
         errorMessage = 'Não foi possível conectar ao servidor. Verifique se o backend está rodando.'
+      } else if (error.response?.data?.message) {
+        // Usar a mensagem específica do backend (inclui "Conta desativada")
+        errorMessage = error.response.data.message
       } else if (error.response?.status === 401) {
         errorMessage = 'E-mail ou senha incorretos. Verifique suas credenciais.'
-      } else if (error.response?.data?.message) {
-        errorMessage = error.response.data.message
       }
       
       set({
