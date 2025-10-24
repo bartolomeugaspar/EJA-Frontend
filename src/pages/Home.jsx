@@ -454,16 +454,16 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container-custom">
-          <div className="text-center mb-16">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container-custom px-4">
+          <div className="text-center mb-12 sm:mb-16">
             <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
               Depoimentos
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
               Histórias de Sucesso
             </h2>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Conheça jovens empreendedores que transformaram suas vidas através do EJA
             </p>
           </div>
@@ -513,7 +513,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white overflow-hidden">
+      <section className="relative py-16 sm:py-20 md:py-24 bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
@@ -521,26 +521,26 @@ const Home = () => {
           }}></div>
         </div>
         
-        <div className="container-custom relative z-10">
+        <div className="container-custom relative z-10 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6">
               Pronto Para Transformar Sua Ideia em Realidade?
             </h2>
-            <p className="text-xl mb-10 text-yellow-50">
+            <p className="text-base sm:text-lg md:text-xl mb-8 sm:mb-10 text-yellow-50">
               Junte-se a mais de 500 jovens empreendedores angolanos que já estão construindo o futuro. 
               Comece sua jornada hoje mesmo, é grátis!
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register" className="bg-white text-yellow-700 hover:bg-yellow-50 inline-flex items-center justify-center text-lg px-8 py-4 font-bold shadow-2xl hover:shadow-xl transition-all rounded-xl">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <Link to="/register" className="bg-white text-yellow-700 hover:bg-yellow-50 inline-flex items-center justify-center text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-bold shadow-2xl hover:shadow-xl transition-all rounded-xl">
                 Criar Conta Gratuita
-                <ArrowRight className="ml-2" size={24} />
+                <ArrowRight className="ml-2" size={20} />
               </Link>
-              <Link to="/about" className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-yellow-700 inline-flex items-center justify-center text-lg px-8 py-4 font-semibold transition-all rounded-xl">
+              <Link to="/about" className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-yellow-700 inline-flex items-center justify-center text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 font-semibold transition-all rounded-xl">
                 Saber Mais
               </Link>
             </div>
             
-            <div className="mt-12 flex items-center justify-center gap-8 text-sm">
+            <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm">
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
