@@ -87,6 +87,8 @@ export const useAuthStore = create((set) => ({
       isAuthenticated: false,
       error: null,
     })
+    // Redirecionar para a home
+    window.location.href = '/'
   },
 
   // Limpar erro
