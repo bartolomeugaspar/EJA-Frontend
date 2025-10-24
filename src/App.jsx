@@ -12,6 +12,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Blog from './pages/Blog'
 import Programs from './pages/Programs'
+import ProgramDetail from './pages/ProgramDetail'
 import About from './pages/About'
 import Contact from './pages/Contact'
 
@@ -57,6 +58,7 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="blog" element={<Blog />} />
         <Route path="programs" element={<Programs />} />
+        <Route path="programs/:id" element={<ProgramDetail />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
       </Route>
