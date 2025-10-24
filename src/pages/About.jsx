@@ -124,12 +124,6 @@ const About = () => {
               Faça parte da maior comunidade de jovens empreendedores de Angola. 
               Transforme suas ideias em realidade com o apoio do EJA.
             </p>
-            <a 
-              href="/register" 
-              className="inline-flex items-center px-8 py-4 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition font-bold text-lg shadow-xl"
-            >
-              Criar Conta Gratuita
-            </a>
           </div>
         </div>
       </section>
