@@ -3,6 +3,7 @@ import { useNotificationStore } from '../../store/notificationStore'
 import { Bell, User, LogOut, Settings, Mail, Shield, Calendar, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import logoEja from '../../assets/image3.jpeg'
 
 const AdminHeader = () => {
   const { user, logout } = useAuthStore()
@@ -42,8 +43,8 @@ const AdminHeader = () => {
       <div className="px-8 py-4 flex items-center justify-between">
         {/* Logo e Título */}
         <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">EJA</span>
+          <div className="w-12 h-12 rounded-lg overflow-hidden bg-white shadow-sm">
+            <img src={logoEja} alt="EJA Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">Painel Administrativo</h1>
@@ -162,7 +163,7 @@ const AdminHeader = () => {
             onClick={() => setShowUserModal(false)}
           ></div>
           
-          <div className="fixed top-20 right-8 z-50 w-[360px] bg-white rounded-xl shadow-2xl border border-gray-100 max-h-[calc(100vh-6rem)] overflow-hidden animate-fade-in">
+          <div className="fixed top-20 right-8 z-50 w-[340px] bg-white rounded-xl shadow-2xl border border-gray-100 max-h-[calc(100vh-6rem)] overflow-hidden animate-fade-in">
             {/* Header do Dropdown */}
             <div className="relative overflow-hidden">
               {/* Background com gradiente e padrão */}
