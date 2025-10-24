@@ -1,68 +1,82 @@
 import { useEffect, useState } from 'react'
 import { adminService } from '../../services/adminService'
-import { Search, Filter, UserPlus, Edit, Trash2, ToggleLeft, ToggleRight, Eye, X, Save, CheckCircle, AlertCircle } from 'lucide-react'
+import { Search, UserPlus, Edit, Trash2, Eye, X, Save, CheckCircle, AlertCircle, Check, XCircle } from 'lucide-react'
 
-const AdminUsers = () => {
-  const [users, setUsers] = useState([])
+const AdminMembers = () => {
+  const [members, setMembers] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [filterRole, setFilterRole] = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [showModal, setShowModal] = useState(false)
-  const [editingUser, setEditingUser] = useState(null)
+  const [editingMember, setEditingMember] = useState(null)
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+  const [selectedMember, setSelectedMember] = useState(null)
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
   const [formData, setFormData] = useState({
     nome_completo: '',
     email: '',
-    senha: '',
-    confirmacao_senha: '',
     data_nascimento: '',
     genero: '',
     nivel_escolaridade: '',
     area_interesse: '',
     telefone: '',
-    endereco: '',
-    role: 'user',
-    ativo: true
+    endereco: ''
   })
 
   useEffect(() => {
-    loadUsers()
-  }, [filterRole, filterStatus])
+    loadMembers()
+  }, [filterStatus])
 
-  const loadUsers = async () => {
+  const loadMembers = async () => {
     try {
       setLoading(true)
       const params = {}
       
-      if (filterRole) params.role = filterRole
-      if (filterStatus) params.ativo = filterStatus
+      if (filterStatus) params.status_aprovacao = filterStatus
       
-      const response = await adminService.getUsers(params)
-      setUsers(response.data.users || [])
+      const response = await adminService.getMembers(params)
+      setMembers(response.members || [])
     } catch (error) {
-      console.error('Erro ao carregar usuários:', error)
-      showToast('error', 'Erro ao carregar usuários')
+      console.error('Erro ao carregar membros:', error)
+      showToast('error', 'Erro ao carregar membros')
     } finally {
       setLoading(false)
     }
   }
 
-  const handleToggleStatus = async (userId) => {
+  const handleApproveMember = async (memberId) => {
+    if (!window.confirm('Deseja aprovar este membro?')) return
+    
     try {
-      await adminService.toggleUserStatus(userId)
-      loadUsers()
+      await adminService.approveMember(memberId)
+      showToast('success', 'Membro aprovado com sucesso!')
+      loadMembers()
     } catch (error) {
-      console.error('Erro ao alterar status:', error)
+      console.error('Erro ao aprovar membro:', error)
+      showToast('error', 'Erro ao aprovar membro')
     }
   }
 
-  const handleDeleteUser = async (userId) => {
-    if (window.confirm('Tem certeza que deseja deletar este usuário?')) {
+  const handleRejectMember = async (memberId) => {
+    const motivo = window.prompt('Motivo da rejeição (opcional):')
+    if (motivo === null) return // Cancelou
+    
+    try {
+      await adminService.rejectMember(memberId, motivo)
+      showToast('success', 'Candidatura rejeitada')
+      loadMembers()
+    } catch (error) {
+      console.error('Erro ao rejeitar membro:', error)
+      showToast('error', 'Erro ao rejeitar membro')
+    }
+  }
+
+  const handleDeleteMember = async (memberId) => {
+    if (window.confirm('Tem certeza que deseja deletar esta candidatura?')) {
       try {
-        await adminService.deleteUser(userId)
-        showToast('success', 'Usuário deletado com sucesso!')
-        loadUsers()
+        await adminService.deleteMember(memberId)
+        showToast('success', 'Candidatura deletada com sucesso!')
+        loadMembers()
       } catch (error) {
         console.error('Erro ao deletar:', error)
         showToast('error', 'Erro ao deletar')
@@ -70,37 +84,30 @@ const AdminUsers = () => {
     }
   }
 
-  const handleOpenModal = (user = null) => {
-    if (user) {
+  const handleOpenModal = (member = null) => {
+    if (member) {
+      setEditingMember(member)
       setFormData({
-        nome_completo: user.nome_completo,
-        email: user.email,
-        senha: '',
-        confirmacao_senha: '',
-        data_nascimento: user.data_nascimento || '',
-        genero: user.genero || '',
-        nivel_escolaridade: user.nivel_escolaridade || '',
-        area_interesse: user.area_interesse || '',
-        telefone: user.telefone || '',
-        endereco: user.endereco || '',
-        role: user.role || 'user',
-        ativo: user.ativo !== undefined ? user.ativo : true
+        nome_completo: member.nome_completo,
+        email: member.email,
+        data_nascimento: member.data_nascimento || '',
+        genero: member.genero || '',
+        nivel_escolaridade: member.nivel_escolaridade || '',
+        area_interesse: member.area_interesse || '',
+        telefone: member.telefone || '',
+        endereco: member.endereco || ''
       })
     } else {
-      setEditingUser(null)
+      setEditingMember(null)
       setFormData({
         nome_completo: '',
         email: '',
-        senha: '',
-        confirmacao_senha: '',
         data_nascimento: '',
         genero: '',
         nivel_escolaridade: '',
         area_interesse: '',
         telefone: '',
-        endereco: '',
-        role: 'user',
-        ativo: true
+        endereco: ''
       })
     }
     setShowModal(true)
@@ -108,20 +115,27 @@ const AdminUsers = () => {
 
   const handleCloseModal = () => {
     setShowModal(false)
-    setEditingUser(null)
+    setEditingMember(null)
     setFormData({
       nome_completo: '',
       email: '',
-      senha: '',
-      confirmacao_senha: '',
       data_nascimento: '',
       genero: '',
       nivel_escolaridade: '',
       area_interesse: '',
       telefone: '',
-      role: 'user',
-      ativo: true
+      endereco: ''
     })
+  }
+
+  const handleViewDetails = (member) => {
+    setSelectedMember(member)
+    setShowDetailsModal(true)
+  }
+
+  const handleCloseDetailsModal = () => {
+    setShowDetailsModal(false)
+    setSelectedMember(null)
   }
 
   const showToast = (type, message) => {
@@ -134,21 +148,15 @@ const AdminUsers = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if (!editingUser && formData.senha !== formData.confirmacao_senha) {
-      showToast('error', 'As senhas não coincidem!')
-      return
-    }
-    
     try {
-      if (editingUser) {
-        await adminService.updateUser(editingUser.id, formData)
-        showToast('success', 'Usuário atualizado com sucesso!')
+      if (editingMember) {
+        await adminService.updateMember(editingMember.id, formData)
+        showToast('success', 'Membro atualizado com sucesso!')
       } else {
-        const { role, ativo, ...userData } = formData
-        await adminService.createUser(userData)
-        showToast('success', 'Usuário criado com sucesso!')
+        await adminService.createMember(formData)
+        showToast('success', 'Candidatura de membro criada com sucesso!')
       }
-      loadUsers()
+      loadMembers()
       handleCloseModal()
     } catch (error) {
       console.error('Erro completo:', error)
@@ -165,10 +173,26 @@ const AdminUsers = () => {
     }
   }
 
-  const filteredUsers = users.filter(user =>
-    user.nome_completo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMembers = members.filter(member =>
+    member.nome_completo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    member.email?.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const getStatusBadge = (status) => {
+    const statusConfig = {
+      pendente: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Pendente' },
+      aprovado: { bg: 'bg-green-100', text: 'text-green-700', label: 'Aprovado' },
+      rejeitado: { bg: 'bg-red-100', text: 'text-red-700', label: 'Rejeitado' }
+    }
+    
+    const config = statusConfig[status] || statusConfig.pendente
+    
+    return (
+      <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${config.bg} ${config.text}`}>
+        {config.label}
+      </span>
+    )
+  }
 
   return (
     <div>
@@ -176,10 +200,10 @@ const AdminUsers = () => {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Gestão de Usuários
+            Gestão de Membros
           </h1>
           <p className="text-gray-600">
-            Gerencie todos os usuários da plataforma (membros e admins)
+            Gerencie as candidaturas e membros da organização
           </p>
         </div>
         <button 
@@ -187,13 +211,13 @@ const AdminUsers = () => {
           className="btn btn-primary inline-flex items-center"
         >
           <UserPlus size={20} className="mr-2" />
-          Novo Usuário
+          Nova Candidatura
         </button>
       </div>
 
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -208,19 +232,20 @@ const AdminUsers = () => {
           </div>
           <div>
             <select
-              value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
               className="input"
             >
-              <option value="">Todos os Perfis</option>
-              <option value="admin">Administrador</option>
-              <option value="member">Membro</option>
+              <option value="">Todos os Status</option>
+              <option value="pendente">Pendente</option>
+              <option value="aprovado">Aprovado</option>
+              <option value="rejeitado">Rejeitado</option>
             </select>
           </div>
         </div>
       </div>
 
-      {/* Users Table */}
+      {/* Members Table */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-64">
@@ -232,10 +257,10 @@ const AdminUsers = () => {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Usuário
+                    Candidato
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Perfil
+                    Telefone
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Área de Interesse
@@ -244,7 +269,7 @@ const AdminUsers = () => {
                     Status
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Cadastro
+                    Data Candidatura
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Ações
@@ -252,67 +277,67 @@ const AdminUsers = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50 transition">
+                {filteredMembers.map((member) => (
+                  <tr key={member.id} className="hover:bg-gray-50 transition">
                     <td className="px-6 py-4">
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
-                          {user.nome_completo?.charAt(0)}
+                          {member.nome_completo?.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{user.nome_completo}</p>
-                          <p className="text-sm text-gray-600">{user.email}</p>
+                          <p className="font-medium text-gray-900">{member.nome_completo}</p>
+                          <p className="text-sm text-gray-600">{member.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
-                        user.role === 'admin'
-                          ? 'bg-purple-100 text-purple-700'
-                          : 'bg-blue-100 text-blue-700'
-                      }`}>
-                        {user.role === 'admin' ? 'Administrador' : 'Membro'}
-                      </span>
+                    <td className="px-6 py-4 text-sm text-gray-900">
+                      {member.telefone || '-'}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      {user.area_interesse || '-'}
+                      {member.area_interesse || '-'}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
-                        user.ativo
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}>
-                        {user.ativo ? 'Ativo' : 'Inativo'}
-                      </span>
+                      {getStatusBadge(member.status_aprovacao)}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      {new Date(user.created_at).toLocaleDateString('pt-BR')}
+                      {new Date(member.data_candidatura).toLocaleDateString('pt-BR')}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center space-x-2">
                         <button
+                          onClick={() => handleViewDetails(member)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
                           title="Ver detalhes"
                         >
                           <Eye size={18} />
                         </button>
+                        {member.status_aprovacao === 'pendente' && (
+                          <>
+                            <button
+                              onClick={() => handleApproveMember(member.id)}
+                              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition"
+                              title="Aprovar"
+                            >
+                              <Check size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleRejectMember(member.id)}
+                              className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition"
+                              title="Rejeitar"
+                            >
+                              <XCircle size={18} />
+                            </button>
+                          </>
+                        )}
                         <button
-                          onClick={() => handleOpenModal(user)}
+                          onClick={() => handleOpenModal(member)}
                           className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
                           title="Editar"
                         >
                           <Edit size={18} />
                         </button>
                         <button
-                          onClick={() => handleToggleStatus(user.id)}
-                          className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition"
-                          title={user.ativo ? 'Desativar' : 'Ativar'}
-                        >
-                          {user.ativo ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
-                        </button>
-                        <button
-                          onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => handleDeleteMember(member.id)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                           title="Deletar"
                         >
@@ -325,9 +350,9 @@ const AdminUsers = () => {
               </tbody>
             </table>
 
-            {filteredUsers.length === 0 && (
+            {filteredMembers.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500">Nenhum usuário encontrado</p>
+                <p className="text-gray-500">Nenhum membro encontrado</p>
               </div>
             )}
           </div>
@@ -337,31 +362,17 @@ const AdminUsers = () => {
       {/* Pagination */}
       <div className="mt-6 flex items-center justify-between">
         <p className="text-sm text-gray-600">
-          Mostrando {filteredUsers.length} de {users.length} usuários
+          Mostrando {filteredMembers.length} de {members.length} membros
         </p>
-        <div className="flex space-x-2">
-          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-            Anterior
-          </button>
-          <button className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition">
-            1
-          </button>
-          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-            2
-          </button>
-          <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-            Próximo
-          </button>
-        </div>
       </div>
 
-      {/* Modal de Criar/Editar Usuário */}
+      {/* Modal de Criar/Editar Membro */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-900">
-                {editingUser ? 'Editar Usuário' : 'Novo Usuário'}
+                {editingMember ? 'Editar Membro' : 'Nova Candidatura'}
               </h2>
               <button
                 onClick={handleCloseModal}
@@ -396,36 +407,6 @@ const AdminUsers = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="input"
                     required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {editingUser ? 'Nova Senha (deixe em branco para não alterar)' : 'Senha *'}
-                  </label>
-                  <input
-                    type="password"
-                    value={formData.senha}
-                    onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
-                    className="input"
-                    required={!editingUser}
-                    minLength="6"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {editingUser ? 'Confirmar Nova Senha' : 'Confirmar Senha *'}
-                  </label>
-                  <input
-                    type="password"
-                    value={formData.confirmacao_senha}
-                    onChange={(e) => setFormData({ ...formData, confirmacao_senha: e.target.value })}
-                    className="input"
-                    required={!editingUser}
-                    minLength="6"
                   />
                 </div>
               </div>
@@ -527,43 +508,13 @@ const AdminUsers = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Perfil
-                  </label>
-                  <select
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="input"
-                  >
-                    <option value="user">Usuário</option>
-                    <option value="admin">Administrador</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Status
-                  </label>
-                  <select
-                    value={formData.ativo}
-                    onChange={(e) => setFormData({ ...formData, ativo: e.target.value === 'true' })}
-                    className="input"
-                  >
-                    <option value="true">Ativo</option>
-                    <option value="false">Inativo</option>
-                  </select>
-                </div>
-              </div>
-
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
                   className="btn btn-primary flex-1 inline-flex items-center justify-center"
                 >
                   <Save size={18} className="mr-2" />
-                  {editingUser ? 'Salvar Alterações' : 'Criar Usuário'}
+                  {editingMember ? 'Salvar Alterações' : 'Criar Candidatura'}
                 </button>
                 <button
                   type="button"
@@ -574,6 +525,108 @@ const AdminUsers = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Detalhes */}
+      {showDetailsModal && selectedMember && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">
+                Detalhes do Membro
+              </h2>
+              <button
+                onClick={handleCloseDetailsModal}
+                className="text-gray-400 hover:text-gray-600 transition"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                  {selectedMember.nome_completo?.charAt(0)}
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">{selectedMember.nome_completo}</h3>
+                  <p className="text-gray-600">{selectedMember.email}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Status</label>
+                  <div>{getStatusBadge(selectedMember.status_aprovacao)}</div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Data de Candidatura</label>
+                  <p className="text-gray-900">{new Date(selectedMember.data_candidatura).toLocaleDateString('pt-BR')}</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Data de Nascimento</label>
+                  <p className="text-gray-900">
+                    {selectedMember.data_nascimento 
+                      ? new Date(selectedMember.data_nascimento).toLocaleDateString('pt-BR')
+                      : '-'}
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Gênero</label>
+                  <p className="text-gray-900 capitalize">{selectedMember.genero?.replace('_', ' ') || '-'}</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Nível de Escolaridade</label>
+                  <p className="text-gray-900 capitalize">{selectedMember.nivel_escolaridade?.replace('_', ' ') || '-'}</p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Telefone</label>
+                  <p className="text-gray-900">{selectedMember.telefone || '-'}</p>
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Área de Interesse</label>
+                  <p className="text-gray-900">{selectedMember.area_interesse || '-'}</p>
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-500 mb-1">Endereço</label>
+                  <p className="text-gray-900">{selectedMember.endereco || '-'}</p>
+                </div>
+              </div>
+
+              {selectedMember.status_aprovacao === 'pendente' && (
+                <div className="flex gap-3 pt-4 border-t">
+                  <button
+                    onClick={() => {
+                      handleApproveMember(selectedMember.id)
+                      handleCloseDetailsModal()
+                    }}
+                    className="btn btn-primary flex-1 inline-flex items-center justify-center"
+                  >
+                    <Check size={18} className="mr-2" />
+                    Aprovar Membro
+                  </button>
+                  <button
+                    onClick={() => {
+                      handleRejectMember(selectedMember.id)
+                      handleCloseDetailsModal()
+                    }}
+                    className="btn bg-red-600 text-white hover:bg-red-700 flex-1 inline-flex items-center justify-center"
+                  >
+                    <XCircle size={18} className="mr-2" />
+                    Rejeitar
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -611,4 +664,4 @@ const AdminUsers = () => {
   )
 }
 
-export default AdminUsers
+export default AdminMembers

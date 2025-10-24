@@ -26,6 +26,7 @@ import Settings from './pages/dashboard/Settings'
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
+import AdminMembers from './pages/admin/AdminMembers'
 import AdminArticles from './pages/admin/AdminArticles'
 import AdminPrograms from './pages/admin/AdminPrograms'
 import AdminContacts from './pages/admin/AdminContacts'
@@ -78,8 +79,8 @@ function App() {
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
-        <Route path="members" element={<AdminUsers key="members" filterRole="member" />} />
-        <Route path="users" element={<AdminUsers key="users" />} />
+        <Route path="members" element={<AdminMembers />} />
+        <Route path="users" element={<AdminUsers />} />
         <Route path="articles" element={<AdminArticles />} />
         <Route path="programs" element={<AdminPrograms />} />
         <Route path="contacts" element={<AdminContacts />} />
