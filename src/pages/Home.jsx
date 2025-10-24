@@ -198,20 +198,20 @@ const Home = () => {
         </div>
 
         {/* Stats Overlay */}
-        <div className="absolute bottom-8 left-0 right-0 z-10">
+        <div className="absolute bottom-4 md:bottom-8 left-0 right-0 z-10 px-4">
           <div className="container-custom">
-            <div className="grid grid-cols-3 gap-6 max-w-xl bg-white/10 backdrop-blur-md rounded-xl p-6">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-6 max-w-xl bg-white/10 backdrop-blur-md rounded-lg md:rounded-xl p-3 sm:p-4 md:p-6">
               <div className="text-center text-white">
-                <div className="text-3xl font-bold mb-1">500+</div>
-                <div className="text-xs text-gray-200">Membros Ativos</div>
+                <div className="text-lg sm:text-2xl md:text-3xl font-bold mb-0.5 md:mb-1">500+</div>
+                <div className="text-[10px] sm:text-xs text-gray-200">Membros Ativos</div>
               </div>
               <div className="text-center text-white">
-                <div className="text-3xl font-bold mb-1">50+</div>
-                <div className="text-xs text-gray-200">Programas</div>
+                <div className="text-lg sm:text-2xl md:text-3xl font-bold mb-0.5 md:mb-1">50+</div>
+                <div className="text-[10px] sm:text-xs text-gray-200">Programas</div>
               </div>
               <div className="text-center text-white">
-                <div className="text-3xl font-bold mb-1">95%</div>
-                <div className="text-xs text-gray-200">Satisfação</div>
+                <div className="text-lg sm:text-2xl md:text-3xl font-bold mb-0.5 md:mb-1">95%</div>
+                <div className="text-[10px] sm:text-xs text-gray-200">Satisfação</div>
               </div>
             </div>
           </div>
