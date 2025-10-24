@@ -1,16 +1,25 @@
-import { useState } from 'react'
-import { Save, Mail, Globe, Shield, Bell, Palette } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Save, Globe, Shield, Bell, AlertCircle, CheckCircle } from 'lucide-react'
 
 const AdminSettings = () => {
   const [settings, setSettings] = useState({
-    siteName: 'EJA - Empreendedorismo Jovem Angolano',
-    siteEmail: 'contato@eja.ao',
-    siteUrl: 'https://eja.ao',
+    siteName: '',
+    siteEmail: '',
+    siteUrl: '',
     maintenanceMode: false,
     allowRegistration: true,
     emailNotifications: true,
     smsNotifications: false,
   })
+  const [loading, setLoading] = useState(false)
+  const [toast, setToast] = useState({ show: false, type: '', message: '' })
+
+  const showToast = (type, message) => {
+    setToast({ show: true, type, message })
+    setTimeout(() => {
+      setToast({ show: false, type: '', message: '' })
+    }, 3000)
+  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -20,10 +29,24 @@ const AdminSettings = () => {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Salvando configurações:', settings)
-    alert('Configurações salvas com sucesso!')
+    setLoading(true)
+    
+    try {
+      // TODO: Conectar ao backend
+      console.log('Salvando configurações:', settings)
+      
+      // Simulação de salvamento
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      showToast('success', 'Configurações salvas com sucesso!')
+    } catch (error) {
+      console.error('Erro ao salvar configurações:', error)
+      showToast('error', 'Erro ao salvar configurações')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -190,13 +213,45 @@ const AdminSettings = () => {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-medium"
+            disabled={loading}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Save size={20} />
-            Salvar Configurações
+            {loading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                Salvando...
+              </>
+            ) : (
+              <>
+                <Save size={20} />
+                Salvar Configurações
+              </>
+            )}
           </button>
         </div>
       </form>
+
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed top-4 right-4 z-50 animate-slide-in-right">
+          <div className={`flex items-center gap-3 px-6 py-4 rounded-lg shadow-xl border-2 min-w-[300px] ${
+            toast.type === 'success' 
+              ? 'bg-green-50 border-green-500 text-green-900' 
+              : 'bg-red-50 border-red-500 text-red-900'
+          }`}>
+            <div className={`flex-shrink-0 ${
+              toast.type === 'success' ? 'text-green-500' : 'text-red-500'
+            }`}>
+              {toast.type === 'success' ? (
+                <CheckCircle size={24} />
+              ) : (
+                <AlertCircle size={24} />
+              )}
+            </div>
+            <p className="font-medium">{toast.message}</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
