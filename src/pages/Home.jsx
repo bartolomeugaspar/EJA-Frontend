@@ -8,7 +8,6 @@ import image4 from '../assets/image4.jpeg'
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0)
 
   const slides = [
     {
@@ -112,13 +111,6 @@ const Home = () => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
-    return () => clearInterval(timer)
-  }, [])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTestimonialIndex((prev) => (prev + 1) % testimonials.length)
-    }, 3000)
     return () => clearInterval(timer)
   }, [])
 
@@ -518,69 +510,49 @@ const Home = () => {
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Histórias de Sucesso
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Conheça jovens empreendedores que transformaram suas vidas através do EJA
             </p>
           </div>
 
-          {/* Carrossel de Depoimentos - 3 por vez */}
-          <div className="relative">
-            <div className="overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[0, 1, 2].map((offset) => {
-                  const index = (currentTestimonialIndex + offset) % testimonials.length
-                  const testimonial = testimonials[index]
-                  return (
-                    <div 
-                      key={index} 
-                      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all p-6 flex flex-col"
-                    >
-                      {/* Imagem */}
-                      <div className="flex justify-center mb-4">
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name} 
-                          className="w-24 h-24 rounded-full object-cover border-4 border-primary-100 shadow-md"
-                        />
-                      </div>
-                      
-                      {/* Estrelas */}
-                      <div className="flex items-center justify-center mb-4">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                          </svg>
-                        ))}
-                      </div>
-                      
-                      {/* Texto */}
-                      <p className="text-gray-600 text-sm italic mb-4 leading-relaxed text-center flex-grow">
-                        "{testimonial.text}"
-                      </p>
-                      
-                      {/* Nome e Cargo */}
-                      <div className="text-center pt-4 border-t border-gray-100">
-                        <p className="font-bold text-gray-900 mb-1">{testimonial.name}</p>
-                        <p className="text-primary-600 font-semibold text-sm">{testimonial.role}</p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* Indicadores */}
-            <div className="flex justify-center gap-2 mt-8">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentTestimonialIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentTestimonialIndex 
-                      ? 'bg-primary-600 w-6' 
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                />
+          {/* Carrossel Infinito Contínuo */}
+          <div className="relative overflow-hidden">
+            <div className="flex gap-4 md:gap-6" style={{ animation: 'scroll 10s linear infinite' }}>
+              {/* Duplicamos os depoimentos para criar efeito infinito */}
+              {[...testimonials, ...testimonials].map((testimonial, index) => (
+                <div 
+                  key={index} 
+                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-4 md:p-5 flex flex-col min-w-[250px] md:min-w-[280px] flex-shrink-0"
+                >
+                  {/* Imagem */}
+                  <div className="flex justify-center mb-4">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name} 
+                      className="w-24 h-24 rounded-full object-cover border-4 border-primary-100 shadow-md"
+                    />
+                  </div>
+                  
+                  {/* Estrelas */}
+                  <div className="flex items-center justify-center mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                      </svg>
+                    ))}
+                  </div>
+                  
+                  {/* Texto */}
+                  <p className="text-gray-600 text-sm italic mb-4 leading-relaxed text-center flex-grow">
+                    "{testimonial.text}"
+                  </p>
+                  
+                  {/* Nome e Cargo */}
+                  <div className="text-center pt-4 border-t border-gray-100">
+                    <p className="font-bold text-gray-900 mb-1">{testimonial.name}</p>
+                    <p className="text-primary-600 font-semibold text-sm">{testimonial.role}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
