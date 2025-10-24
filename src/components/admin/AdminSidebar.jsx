@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../store/authStore'
+import { adminService } from '../../services/adminService'
 import {
   LayoutDashboard,
   Users,
@@ -22,6 +23,26 @@ const AdminSidebar = ({ onItemClick }) => {
   const navigate = useNavigate()
   const { logout } = useAuthStore()
   const [showLogoutToast, setShowLogoutToast] = useState(false)
+  const [pendingMembersCount, setPendingMembersCount] = useState(0)
+
+  // Buscar contagem de membros pendentes
+  useEffect(() => {
+    const fetchPendingMembers = async () => {
+      try {
+        const response = await adminService.getMembers({ status_aprovacao: 'pendente' })
+        setPendingMembersCount(response.total || 0)
+      } catch (error) {
+        console.error('Erro ao buscar membros pendentes:', error)
+      }
+    }
+
+    fetchPendingMembers()
+    
+    // Atualizar a cada 30 segundos
+    const interval = setInterval(fetchPendingMembers, 30000)
+    
+    return () => clearInterval(interval)
+  }, [])
 
   const handleLogout = () => {
     setShowLogoutToast(true)
@@ -35,7 +56,12 @@ const AdminSidebar = ({ onItemClick }) => {
 
   const menuItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-    { path: '/admin/members', icon: Users, label: 'Membros' },
+    { 
+      path: '/admin/members', 
+      icon: Users, 
+      label: 'Membros',
+      badge: pendingMembersCount > 0 ? pendingMembersCount : null
+    },
     { path: '/admin/users', icon: Shield, label: 'Usuários' },
     { path: '/admin/articles', icon: BookOpen, label: 'Artigos' },
     { path: '/admin/programs', icon: Calendar, label: 'Programas' },

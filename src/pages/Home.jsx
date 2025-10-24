@@ -126,7 +126,7 @@ const Home = () => {
   return (
     <div>
       {/* Hero Carousel */}
-      <section className="relative h-[600px] md:h-[800px] overflow-hidden">
+      <section className="relative h-[500px] sm:h-[600px] md:h-[700px] lg:h-[800px] overflow-hidden">
         {/* Slides */}
         {slides.map((slide, index) => (
           <div
@@ -143,24 +143,24 @@ const Home = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-slate-900/70 via-slate-800/50 to-transparent"></div>
             
             {/* Content */}
-            <div className="absolute inset-0 flex items-center">
+            <div className="absolute inset-0 flex items-center px-4">
               <div className="container-custom">
                 <div className="max-w-2xl text-white">
-                  <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 md:mb-4 leading-tight">
                     {slide.title}
                   </h1>
-                  <p className="text-xl md:text-2xl mb-3 text-gray-200 font-semibold">
+                  <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-2 md:mb-3 text-gray-200 font-semibold">
                     {slide.subtitle}
                   </p>
-                  <p className="text-lg mb-6 text-gray-300">
+                  <p className="text-sm sm:text-base md:text-lg mb-4 md:mb-6 text-gray-300 hidden sm:block">
                     {slide.description}
                   </p>
                   <Link
                     to={slide.ctaLink}
-                    className="inline-flex items-center px-8 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-bold text-lg shadow-2xl hover:shadow-yellow-500/50"
+                    className="inline-flex items-center px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-bold text-sm sm:text-base md:text-lg shadow-2xl hover:shadow-yellow-500/50"
                   >
                     {slide.cta}
-                    <ArrowRight className="ml-2" size={20} />
+                    <ArrowRight className="ml-2" size={18} />
                   </Link>
                 </div>
               </div>
@@ -171,19 +171,19 @@ const Home = () => {
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition z-10"
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition z-10"
         >
-          <ChevronLeft className="text-white" size={28} />
+          <ChevronLeft className="text-white" size={20} />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition z-10"
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center transition z-10"
         >
-          <ChevronRight className="text-white" size={28} />
+          <ChevronRight className="text-white" size={20} />
         </button>
 
         {/* Dots */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+        <div className="absolute bottom-20 sm:bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 flex gap-2 sm:gap-3 z-10">
           {slides.map((_, index) => (
             <button
               key={index}
@@ -219,22 +219,22 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-gray-50">
-        <div className="container-custom">
-          <div className="text-center mb-20">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white to-gray-50">
+        <div className="container-custom px-4">
+          <div className="text-center mb-12 sm:mb-16 md:mb-20">
             <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
               O Que Oferecemos
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
               Tudo Para o Seu Sucesso
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
               Oferecemos um ecossistema completo de apoio ao empreendedorismo jovem, 
               com recursos práticos e mentoria especializada para transformar sua visão em realidade
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {[
               {
                 icon: BookOpen,
@@ -273,12 +273,12 @@ const Home = () => {
               return (
                 <div 
                   key={index} 
-                  className={`bg-white rounded-2xl p-8 border-2 ${service.borderColor} hover:shadow-2xl hover:scale-105 transition-all duration-300 group`}
+                  className={`bg-white rounded-xl md:rounded-2xl p-5 sm:p-6 md:p-8 border-2 ${service.borderColor} hover:shadow-2xl hover:scale-105 transition-all duration-300 group`}
                 >
-                  <div className={`w-16 h-16 ${service.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
-                    <Icon className="text-white" size={28} />
+                  <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ${service.color} rounded-lg md:rounded-xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:scale-110 transition-transform shadow-lg`}>
+                    <Icon className="text-white" size={24} />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">{service.title}</h3>
                   <p className="text-gray-600 leading-relaxed text-sm">{service.description}</p>
                 </div>
               )
@@ -286,34 +286,34 @@ const Home = () => {
           </div>
 
           {/* CTA Button */}
-          <div className="text-center mt-16">
+          <div className="text-center mt-10 sm:mt-12 md:mt-16">
             <Link 
               to="/register" 
-              className="inline-flex items-center px-8 py-4 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition font-bold text-lg shadow-xl hover:shadow-2xl"
+              className="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-yellow-500 text-white rounded-lg sm:rounded-xl hover:bg-yellow-600 transition font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl"
             >
               Começar Agora
-              <ArrowRight className="ml-2" size={20} />
+              <ArrowRight className="ml-2" size={18} />
             </Link>
           </div>
         </div>
       </section>
 
       {/* Objetivos Section */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container-custom">
-          <div className="text-center mb-20">
+      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container-custom px-4">
+          <div className="text-center mb-12 sm:mb-16 md:mb-20">
             <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
               Nossa Missão
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
               O Que Buscamos Alcançar
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Trabalhamos com três pilares fundamentais para transformar o ecossistema empreendedor angolano
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
             <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border-t-4 border-blue-500">
               <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mb-4">
                 <Target className="text-white" size={22} />
@@ -358,16 +358,16 @@ const Home = () => {
       </section>
 
       {/* Público-Alvo Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container-custom">
-          <div className="text-center mb-16">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+        <div className="container-custom px-4">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
             <span className="text-primary-600 font-semibold text-sm uppercase tracking-wide">Para Quem</span>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 mt-2">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 mt-2 px-4">
               Público-Alvo
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
             <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all text-center">
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="text-primary-600" size={28} />
@@ -396,21 +396,21 @@ const Home = () => {
       </section>
 
       {/* Parceiros Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-        <div className="container-custom">
-          <div className="text-center mb-16">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="container-custom px-4">
+          <div className="text-center mb-10 sm:mb-12 md:mb-16">
             <span className="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
               Parceiros
             </span>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
               Quem Nos Apoia
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Trabalhamos com empresas e organizações comprometidas com o desenvolvimento do empreendedorismo em Angola
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-7 md:gap-8 max-w-4xl mx-auto">
             {/* Queta Boost */}
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 text-center">
               <div className="w-32 h-32 mx-auto mb-6 rounded-xl overflow-hidden bg-gray-50 flex items-center justify-center">

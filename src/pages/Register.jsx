@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuthStore } from '../store/authStore'
-import { User, Mail, Lock, Calendar, Phone, MapPin, AlertCircle } from 'lucide-react'
+import { User, Mail, Calendar, Phone, MapPin, AlertCircle, CheckCircle } from 'lucide-react'
+import api from '../services/api'
 
 const Register = () => {
   const navigate = useNavigate()
-  const { register, isLoading, error, clearError } = useAuthStore()
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
   const [formData, setFormData] = useState({
     nome_completo: '',
     email: '',
-    senha: '',
-    confirmacao_senha: '',
     data_nascimento: '',
     genero: '',
     nivel_escolaridade: '',
@@ -24,23 +24,50 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value,
     })
-    clearError()
+    setError('')
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    if (formData.senha !== formData.confirmacao_senha) {
-      alert('As senhas não coincidem')
-      return
-    }
+    setIsLoading(true)
+    setError('')
 
     try {
-      await register(formData)
-      navigate('/dashboard')
+      await api.post('/members', formData)
+      setSuccess(true)
+      setTimeout(() => {
+        navigate('/')
+      }, 3000)
     } catch (err) {
-      // Error is handled by the store
+      setError(err.response?.data?.message || 'Erro ao enviar candidatura. Tente novamente.')
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  if (success) {
+    return (
+      <div className="min-h-[calc(100vh-80px)] flex items-center justify-center bg-gradient-to-br from-green-50 via-blue-50 to-gray-100 px-4 py-8">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="text-green-600" size={40} />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Candidatura Enviada!</h2>
+          <p className="text-gray-600 mb-6">
+            Sua candidatura foi recebida com sucesso. Nossa equipe irá analisá-la e entraremos em contato em breve.
+          </p>
+          <p className="text-sm text-gray-500 mb-6">
+            Você receberá um e-mail de confirmação em <strong>{formData.email}</strong>
+          </p>
+          <Link
+            to="/"
+            className="inline-block px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-semibold"
+          >
+            Voltar para Home
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -52,8 +79,8 @@ const Register = () => {
       
       <div className="max-w-2xl w-full relative z-10">
         <div className="text-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">Criar Conta</h2>
-          <p className="text-sm text-gray-600">Junte-se à comunidade EJA</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-1">Candidatura de Membro</h2>
+          <p className="text-sm text-gray-600">Junte-se à comunidade EJA e transforme seu futuro empreendedor</p>
         </div>
 
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-4 border border-white/20">
@@ -229,53 +256,7 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Senha */}
-            <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2 pb-1.5 border-b border-gray-200">Segurança</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                <div>
-                  <label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-1">
-                    Senha *
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      id="senha"
-                      name="senha"
-                      type="password"
-                      required
-                      minLength={6}
-                      value={formData.senha}
-                      onChange={handleChange}
-                      className="input pl-10"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="confirmacao_senha" className="block text-sm font-medium text-gray-700 mb-1">
-                    Confirmar Senha *
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      id="confirmacao_senha"
-                      name="confirmacao_senha"
-                      type="password"
-                      required
-                      minLength={6}
-                      value={formData.confirmacao_senha}
-                      onChange={handleChange}
-                      className="input pl-10"
-                      placeholder="••••••••"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center">
+            <div className="flex items-center pt-2">
               <input
                 id="terms"
                 name="terms"
@@ -303,12 +284,19 @@ const Register = () => {
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>Criando conta...</span>
+                  <span>Enviando candidatura...</span>
                 </div>
               ) : (
-                'Criar Conta'
+                'Enviar Candidatura'
               )}
             </button>
+
+            <p className="text-center text-xs text-gray-600 mt-4">
+              Já tem uma conta?{' '}
+              <Link to="/login" className="text-primary-600 hover:text-primary-700 font-semibold">
+                Fazer Login
+              </Link>
+            </p>
           </form>
         </div>
       </div>
