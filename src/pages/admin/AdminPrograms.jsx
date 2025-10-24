@@ -1,15 +1,26 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { adminService } from '../../services/adminService'
-import { Search, Plus, Edit, Trash2, Calendar, MapPin, Users } from 'lucide-react'
+import { Search, Plus, Edit, Trash2, Calendar, MapPin, Users, Eye, CheckCircle, XCircle } from 'lucide-react'
 
 const AdminPrograms = () => {
+  const navigate = useNavigate()
   const [programs, setPrograms] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [toast, setToast] = useState({ show: false, type: '', message: '' })
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+  const [selectedProgram, setSelectedProgram] = useState(null)
 
   useEffect(() => {
     loadPrograms()
   }, [])
+  const showToast = (type, message) => {
+    setToast({ show: true, type, message })
+    setTimeout(() => {
+      setToast({ show: false, type: '', message: '' })
+    }, 5000)
+  }
 
   const loadPrograms = async () => {
     try {
@@ -18,18 +29,31 @@ const AdminPrograms = () => {
       setPrograms(response.data || [])
     } catch (error) {
       console.error('Erro ao carregar programas:', error)
+      showToast('error', 'Erro ao carregar programas')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleViewDetails = (program) => {
+    setSelectedProgram(program)
+    setShowDetailsModal(true)
+  }
+
+  const handleCloseDetailsModal = () => {
+    setShowDetailsModal(false)
+    setSelectedProgram(null)
   }
 
   const handleDeleteProgram = async (id) => {
     if (window.confirm('Tem certeza que deseja deletar este programa?')) {
       try {
         await adminService.deleteProgram(id)
+        showToast('success', 'Programa deletado com sucesso!')
         loadPrograms()
       } catch (error) {
         console.error('Erro ao deletar programa:', error)
+        showToast('error', 'Erro ao deletar programa')
       }
     }
   }
@@ -65,7 +89,10 @@ const AdminPrograms = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestão de Programas</h1>
           <p className="text-gray-600">Gerencie workshops, cursos e eventos</p>
         </div>
-        <button className="btn btn-primary inline-flex items-center">
+        <button 
+          onClick={() => navigate('/admin/programs/new')}
+          className="btn btn-primary inline-flex items-center"
+        >
           <Plus size={20} className="mr-2" />
           Novo Programa
         </button>
@@ -156,12 +183,24 @@ const AdminPrograms = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end space-x-2">
-                        <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
+                        <button 
+                          onClick={() => handleViewDetails(program)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                          title="Ver detalhes"
+                        >
+                          <Eye size={18} />
+                        </button>
+                        <button 
+                          onClick={() => navigate(`/admin/programs/edit/${program.id}`)}
+                          className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                          title="Editar"
+                        >
                           <Edit size={18} />
                         </button>
                         <button
                           onClick={() => handleDeleteProgram(program.id)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                          title="Deletar"
                         >
                           <Trash2 size={18} />
                         </button>

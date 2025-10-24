@@ -10,10 +10,18 @@ const AdminArticles = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [selectedArticle, setSelectedArticle] = useState(null)
+  const [toast, setToast] = useState({ show: false, type: '', message: '' })
 
   useEffect(() => {
     loadArticles()
   }, [])
+
+  const showToast = (type, message) => {
+    setToast({ show: true, type, message })
+    setTimeout(() => {
+      setToast({ show: false, type: '', message: '' })
+    }, 5000)
+  }
 
   const loadArticles = async () => {
     try {
@@ -27,6 +35,7 @@ const AdminArticles = () => {
       setArticles(response.data?.articles || [])
     } catch (error) {
       console.error('Erro ao carregar artigos:', error)
+      showToast('error', 'Erro ao carregar artigos')
       setArticles([]) // Garantir que articles seja sempre um array
     } finally {
       setLoading(false)
@@ -47,9 +56,11 @@ const AdminArticles = () => {
     if (window.confirm('Tem certeza que deseja deletar este artigo?')) {
       try {
         await adminService.deleteArticle(id)
+        showToast('success', 'Artigo deletado com sucesso!')
         loadArticles()
       } catch (error) {
         console.error('Erro ao deletar artigo:', error)
+        showToast('error', 'Erro ao deletar artigo')
       }
     }
   }
@@ -235,6 +246,28 @@ const AdminArticles = () => {
                 Editar Artigo
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toast.show && (
+        <div className="fixed top-4 right-4 z-50 transition-all duration-300 ease-out transform translate-x-0 opacity-100">
+          <div className={`flex items-center gap-3 px-6 py-4 rounded-lg shadow-xl border-2 min-w-[300px] ${
+            toast.type === 'success' 
+              ? 'bg-green-50 border-green-500 text-green-900' 
+              : 'bg-red-50 border-red-500 text-red-900'
+          }`}>
+            <div className={`flex-shrink-0 ${
+              toast.type === 'success' ? 'text-green-500' : 'text-red-500'
+            }`}>
+              {toast.type === 'success' ? (
+                <CheckCircle size={24} />
+              ) : (
+                <XCircle size={24} />
+              )}
+            </div>
+            <p className="font-medium">{toast.message}</p>
           </div>
         </div>
       )}

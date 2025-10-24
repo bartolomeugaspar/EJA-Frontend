@@ -9,6 +9,7 @@ const ArticleForm = () => {
   const isEditing = !!id
 
   const [loading, setLoading] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
   const [formData, setFormData] = useState({
     titulo: '',
@@ -19,6 +20,8 @@ const ArticleForm = () => {
     publicado: false
   })
   const [tagInput, setTagInput] = useState('')
+  const [imageFile, setImageFile] = useState(null)
+  const [imagePreview, setImagePreview] = useState('')
 
   useEffect(() => {
     if (isEditing) {
@@ -71,6 +74,44 @@ const ArticleForm = () => {
     })
   }
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImageFile(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImagePreview(reader.result)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleUploadImage = async () => {
+    if (!imageFile) return
+
+    try {
+      setUploading(true)
+      const formDataUpload = new FormData()
+      formDataUpload.append('image', imageFile)
+
+      const response = await adminService.uploadImage(formDataUpload)
+      const imageUrl = `${import.meta.env.VITE_API_URL}${response.data.url}`
+      
+      setFormData({
+        ...formData,
+        imagem_capa: imageUrl
+      })
+      setImageFile(null)
+      setImagePreview('')
+      showToast('success', 'Imagem enviada com sucesso!')
+    } catch (error) {
+      console.error('Erro ao fazer upload:', error)
+      showToast('error', 'Erro ao fazer upload da imagem')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -79,18 +120,30 @@ const ArticleForm = () => {
       return
     }
 
+    // Verificar se há upload pendente
+    if (imageFile || imagePreview) {
+      showToast('error', 'Por favor, confirme o upload da imagem antes de salvar o artigo')
+      return
+    }
+
     try {
       setLoading(true)
+      console.log('Dados sendo enviados:', formData)
+      console.log('URL da imagem:', formData.imagem_capa)
+      
       if (isEditing) {
-        await adminService.updateArticle(id, formData)
+        const response = await adminService.updateArticle(id, formData)
+        console.log('Resposta da atualização:', response)
         showToast('success', 'Artigo atualizado com sucesso!')
       } else {
-        await adminService.createArticle(formData)
+        const response = await adminService.createArticle(formData)
+        console.log('Resposta da criação:', response)
         showToast('success', 'Artigo criado com sucesso!')
       }
       setTimeout(() => navigate('/admin/articles'), 1500)
     } catch (error) {
       console.error('Erro ao salvar artigo:', error)
+      console.error('Detalhes do erro:', error.response?.data)
       showToast('error', error.response?.data?.message || 'Erro ao salvar artigo')
     } finally {
       setLoading(false)
@@ -180,27 +233,113 @@ const ArticleForm = () => {
         {/* Imagem de Capa */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            URL da Imagem de Capa
+            Imagem de Capa
           </label>
-          <div className="flex gap-2">
-            <input
-              type="url"
-              value={formData.imagem_capa}
-              onChange={(e) => setFormData({ ...formData, imagem_capa: e.target.value })}
-              className="input flex-1"
-              placeholder="https://exemplo.com/imagem.jpg"
-            />
-            {formData.imagem_capa && (
+          
+          {/* Tabs para escolher método */}
+          <div className="flex gap-2 mb-3">
+            <button
+              type="button"
+              onClick={() => {
+                setImageFile(null)
+                setImagePreview('')
+              }}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                !imageFile && !imagePreview
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              URL da Imagem
+            </button>
+            <button
+              type="button"
+              onClick={() => document.getElementById('imageUpload').click()}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                imageFile || imagePreview
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              <Upload size={16} className="inline mr-1" />
+              Fazer Upload
+            </button>
+          </div>
+
+          {/* Input de URL */}
+          {!imageFile && !imagePreview && (
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={formData.imagem_capa}
+                onChange={(e) => setFormData({ ...formData, imagem_capa: e.target.value })}
+                className="input flex-1"
+                placeholder="https://exemplo.com/imagem.jpg"
+              />
+              {formData.imagem_capa && (
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, imagem_capa: '' })}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                >
+                  <X size={20} />
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Input de Upload (hidden) */}
+          <input
+            id="imageUpload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+          />
+
+          {/* Preview e botão de upload */}
+          {imagePreview && (
+            <div className="space-y-3">
+              <div className="relative">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImageFile(null)
+                    setImagePreview('')
+                  }}
+                  className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+                >
+                  <X size={16} />
+                </button>
+              </div>
               <button
                 type="button"
-                onClick={() => setFormData({ ...formData, imagem_capa: '' })}
-                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                onClick={handleUploadImage}
+                disabled={uploading}
+                className="btn btn-primary w-full inline-flex items-center justify-center gap-2"
               >
-                <X size={20} />
+                {uploading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <Upload size={18} />
+                    Confirmar Upload
+                  </>
+                )}
               </button>
-            )}
-          </div>
-          {formData.imagem_capa && (
+            </div>
+          )}
+
+          {/* Preview da URL */}
+          {formData.imagem_capa && !imagePreview && (
             <div className="mt-3">
               <img
                 src={formData.imagem_capa}

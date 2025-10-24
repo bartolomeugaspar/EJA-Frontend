@@ -115,6 +115,15 @@ export const adminService = {
     return response.data
   },
 
+  uploadImage: async (formData) => {
+    const response = await api.post('/blog/upload-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return response.data
+  },
+
   // Programas
   getPrograms: async (params) => {
     const response = await api.get('/programs', { params })
