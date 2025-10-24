@@ -157,7 +157,7 @@ const Home = () => {
                   </p>
                   <Link
                     to={slide.ctaLink}
-                    className="inline-flex items-center px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-bold text-lg shadow-2xl hover:shadow-primary-500/50"
+                    className="inline-flex items-center px-8 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-bold text-lg shadow-2xl hover:shadow-yellow-500/50"
                   >
                     {slide.cta}
                     <ArrowRight className="ml-2" size={20} />
@@ -248,9 +248,9 @@ const Home = () => {
                 icon: Users,
                 title: 'Mentoria Personalizada',
                 description: 'Acompanhamento individual com empreendedores experientes que já trilharam o caminho do sucesso',
-                color: 'bg-orange-500',
-                bgColor: 'bg-orange-50',
-                borderColor: 'border-orange-200'
+                color: 'bg-yellow-500',
+                bgColor: 'bg-yellow-50',
+                borderColor: 'border-yellow-200'
               },
               {
                 icon: Rocket,
@@ -289,7 +289,7 @@ const Home = () => {
           <div className="text-center mt-16">
             <Link 
               to="/register" 
-              className="inline-flex items-center px-8 py-4 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition font-bold text-lg shadow-xl hover:shadow-2xl"
+              className="inline-flex items-center px-8 py-4 bg-yellow-500 text-white rounded-xl hover:bg-yellow-600 transition font-bold text-lg shadow-xl hover:shadow-2xl"
             >
               Começar Agora
               <ArrowRight className="ml-2" size={20} />
@@ -324,8 +324,8 @@ const Home = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border-t-4 border-orange-500">
-              <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mb-4">
+            <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow border-t-4 border-yellow-500">
+              <div className="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mb-4">
                 <Lightbulb className="text-white" size={22} />
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-3">Cultura Empreendedora</h3>
@@ -377,8 +377,8 @@ const Home = () => {
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all text-center">
-              <div className="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BookOpen className="text-secondary-600" size={28} />
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BookOpen className="text-yellow-600" size={28} />
               </div>
               <h3 className="text-lg font-bold text-gray-900 mb-2">Estudantes Universitários</h3>
               <p className="text-gray-600 text-sm">Estudantes que buscam complementar sua formação acadêmica com conhecimento prático em negócios</p>
@@ -429,11 +429,11 @@ const Home = () => {
 
             {/* Parceiro 2 */}
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-20 h-20 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Rocket className="text-white" size={32} />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Inovação Hub</h3>
-              <p className="text-orange-600 font-semibold mb-3">Aceleração de Startups</p>
+              <p className="text-yellow-600 font-semibold mb-3">Aceleração de Startups</p>
               <p className="text-sm text-gray-600">
                 Programas de aceleração e mentoria
               </p>
@@ -560,7 +560,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="relative py-24 bg-gradient-to-r from-primary-600 via-primary-700 to-primary-800 text-white overflow-hidden">
+      <section className="relative py-24 bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-700 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{
             backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
@@ -573,16 +573,16 @@ const Home = () => {
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Pronto Para Transformar Sua Ideia em Realidade?
             </h2>
-            <p className="text-xl mb-10 text-primary-100">
+            <p className="text-xl mb-10 text-yellow-50">
               Junte-se a mais de 500 jovens empreendedores angolanos que já estão construindo o futuro. 
               Comece sua jornada hoje mesmo, é grátis!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register" className="btn bg-white text-primary-600 hover:bg-gray-100 inline-flex items-center justify-center text-lg px-8 py-4">
+              <Link to="/register" className="bg-white text-yellow-700 hover:bg-yellow-50 inline-flex items-center justify-center text-lg px-8 py-4 font-bold shadow-2xl hover:shadow-xl transition-all rounded-xl">
                 Criar Conta Gratuita
                 <ArrowRight className="ml-2" size={24} />
               </Link>
-              <Link to="/about" className="btn bg-white/10 text-white border-2 border-white/30 hover:bg-white/20 inline-flex items-center justify-center text-lg px-8 py-4">
+              <Link to="/about" className="bg-transparent text-white border-2 border-white hover:bg-white hover:text-yellow-700 inline-flex items-center justify-center text-lg px-8 py-4 font-semibold transition-all rounded-xl">
                 Saber Mais
               </Link>
             </div>

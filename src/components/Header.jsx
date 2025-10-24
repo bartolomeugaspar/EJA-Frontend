@@ -31,19 +31,19 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-primary-600 transition">
+            <Link to="/" className="text-gray-700 hover:text-yellow-600 transition font-medium">
               Início
             </Link>
-            <Link to="/blog" className="text-gray-700 hover:text-primary-600 transition">
+            <Link to="/blog" className="text-gray-700 hover:text-yellow-600 transition font-medium">
               Blog
             </Link>
-            <Link to="/programs" className="text-gray-700 hover:text-primary-600 transition">
+            <Link to="/programs" className="text-gray-700 hover:text-yellow-600 transition font-medium">
               Programas
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-primary-600 transition">
+            <Link to="/about" className="text-gray-700 hover:text-yellow-600 transition font-medium">
               Sobre
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-primary-600 transition">
+            <Link to="/contact" className="text-gray-700 hover:text-yellow-600 transition font-medium">
               Contato
             </Link>
           </div>
@@ -68,7 +68,7 @@ const Header = () => {
                 </button>
               </>
             ) : (
-              <Link to="/login" className="btn btn-primary">
+              <Link to="/login" className="bg-yellow-500 text-white px-6 py-2.5 rounded-lg hover:bg-yellow-600 transition font-semibold shadow-md hover:shadow-lg">
                 Entrar
               </Link>
             )}
@@ -146,7 +146,7 @@ const Header = () => {
                   <Link
                     to="/login"
                     onClick={() => setIsMenuOpen(false)}
-                    className="btn btn-primary w-full"
+                    className="bg-yellow-500 text-white px-6 py-2.5 rounded-lg hover:bg-yellow-600 transition font-semibold shadow-md hover:shadow-lg w-full text-center"
                   >
                     Entrar
                   </Link>
