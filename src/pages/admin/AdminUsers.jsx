@@ -214,38 +214,39 @@ const AdminUsers = () => {
   )
 
   return (
-    <div>
+    <div className="pb-20 lg:pb-8">
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
             Gestão de Usuários
           </h1>
-          <p className="text-gray-600">
+          <p className="text-sm md:text-base text-gray-600">
             Gerencie todos os usuários da plataforma (membros e admins)
           </p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="btn btn-primary inline-flex items-center"
+          className="btn btn-primary inline-flex items-center justify-center w-full sm:w-auto"
         >
           <UserPlus size={20} className="mr-2" />
-          Novo Usuário
+          <span className="hidden sm:inline">Novo Usuário</span>
+          <span className="sm:hidden">Novo</span>
         </button>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-4 md:mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-4">
           <div className="md:col-span-3">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               <input
                 type="text"
                 placeholder="Pesquisar por nome ou email..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input pl-10"
+                className="input pl-10 text-sm"
               />
             </div>
           </div>
@@ -253,7 +254,7 @@ const AdminUsers = () => {
             <select
               value={filterRole}
               onChange={(e) => setFilterRole(e.target.value)}
-              className="input"
+              className="input text-sm"
             >
               <option value="">Todos os Perfis</option>
               <option value="admin">Administrador</option>
@@ -270,8 +271,13 @@ const AdminUsers = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <>
+            {/* Dica de scroll para mobile */}
+            <div className="lg:hidden bg-gray-50 px-4 py-2 text-xs text-gray-600 border-b border-gray-200">
+              ← Deslize para ver mais →
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[800px]">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -373,7 +379,8 @@ const AdminUsers = () => {
                 <p className="text-gray-500">Nenhum usuário encontrado</p>
               </div>
             )}
-          </div>
+            </div>
+          </>
         )}
       </div>
 
