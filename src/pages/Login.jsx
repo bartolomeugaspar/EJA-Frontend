@@ -24,6 +24,7 @@ const Login = () => {
   }, [])    
   useEffect(() => {
     if (error) {
+      console.log('Erro detectado, mostrando toast:', error)
       setShowToast(true)
       // Auto-fechar após 8 segundos (mais tempo para contas desativadas)
       const timer = setTimeout(() => {
@@ -32,7 +33,7 @@ const Login = () => {
       }, 8000)
       return () => clearTimeout(timer)
     }
-  }, [error])
+  }, [error, clearError])
 
   const handleChange = (e) => {
     setFormData({
@@ -82,11 +83,13 @@ const Login = () => {
       }, 2000)
     } catch (err) {
       // Erro capturado - usuário inativo, senha errada, etc.
-      console.error('Erro no login:', err)
+      console.error('Erro no login capturado:', err)
       console.error('Status:', err.response?.status)
       console.error('Mensagem:', err.response?.data?.message)
-      // Não fazer nada - o erro já está sendo tratado pelo authStore e mostrado no toast
-      // Não tentar navegar ou fazer qualquer ação adicional
+      console.error('Código:', err.code)
+      console.log('Estado do error no store após catch:', error)
+      // O erro já está sendo tratado pelo authStore e mostrado no toast
+      // O useEffect irá detectar a mudança no error e mostrar o toast
     }
   }
 
@@ -247,8 +250,8 @@ const Login = () => {
                       : 'text-red-900'
                   }`}>
                     {error.includes('desativada') || error.includes('inativa') 
-                      ? '⚠️ Conta Desativada' 
-                      : '❌ Erro ao fazer login'
+                      ? 'Conta Desativada' 
+                      : 'Erro ao fazer login'
                     }
                   </h3>
                   <p className={`text-sm mb-2 font-medium ${
