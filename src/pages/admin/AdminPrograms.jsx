@@ -10,7 +10,9 @@ const AdminPrograms = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
   const [showDetailsModal, setShowDetailsModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [selectedProgram, setSelectedProgram] = useState(null)
+  const [programToDelete, setProgramToDelete] = useState(null)
 
   useEffect(() => {
     loadPrograms()
@@ -45,16 +47,27 @@ const AdminPrograms = () => {
     setSelectedProgram(null)
   }
 
-  const handleDeleteProgram = async (id) => {
-    if (window.confirm('Tem certeza que deseja deletar este programa?')) {
-      try {
-        await adminService.deleteProgram(id)
-        showToast('success', 'Programa deletado com sucesso!')
-        loadPrograms()
-      } catch (error) {
-        console.error('Erro ao deletar programa:', error)
-        showToast('error', 'Erro ao deletar programa')
-      }
+  const handleOpenDeleteModal = (program) => {
+    setProgramToDelete(program)
+    setShowDeleteModal(true)
+  }
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false)
+    setProgramToDelete(null)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!programToDelete) return
+
+    try {
+      await adminService.deleteProgram(programToDelete.id)
+      showToast('success', 'Programa deletado com sucesso!')
+      handleCloseDeleteModal()
+      loadPrograms()
+    } catch (error) {
+      console.error('Erro ao deletar programa:', error)
+      showToast('error', 'Erro ao deletar programa')
     }
   }
 
@@ -198,7 +211,7 @@ const AdminPrograms = () => {
                           <Edit size={18} />
                         </button>
                         <button
-                          onClick={() => handleDeleteProgram(program.id)}
+                          onClick={() => handleOpenDeleteModal(program)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                           title="Deletar"
                         >
@@ -313,6 +326,51 @@ const AdminPrograms = () => {
                 <Edit size={18} />
                 Editar Programa
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Confirmação de Exclusão */}
+      {showDeleteModal && programToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <Trash2 className="text-red-600" size={24} />
+              </div>
+              
+              <h2 className="text-xl font-bold text-gray-900 text-center mb-2">
+                Deletar Programa?
+              </h2>
+              
+              <p className="text-gray-600 text-center mb-4">
+                Tem certeza que deseja deletar este programa? Esta ação não pode ser desfeita e todos os dados relacionados serão perdidos.
+              </p>
+
+              <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                <div className="space-y-2 text-sm">
+                  <p><strong>Programa:</strong> {programToDelete.titulo}</p>
+                  <p><strong>Tipo:</strong> {programToDelete.tipo}</p>
+                  <p><strong>Data:</strong> {new Date(programToDelete.data_inicio).toLocaleDateString('pt-BR')}</p>
+                  <p><strong>Vagas:</strong> {programToDelete.vagas}</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleCloseDeleteModal}
+                  className="flex-1 btn bg-gray-200 text-gray-700 hover:bg-gray-300"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleConfirmDelete}
+                  className="flex-1 btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500"
+                >
+                  Deletar
+                </button>
+              </div>
             </div>
           </div>
         </div>

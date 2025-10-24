@@ -161,6 +161,11 @@ export const adminService = {
     return response.data
   },
 
+  deleteContact: async (id) => {
+    const response = await api.delete(`/contact/${id}`)
+    return response.data
+  },
+
   // Logs de Login
   getLoginLogs: async (params) => {
     const response = await api.get('/reports/login-logs', { params })

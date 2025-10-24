@@ -1,10 +1,40 @@
 import { useAuthStore } from '../../store/authStore'
+import { useNotificationStore } from '../../store/notificationStore'
 import { Bell, Search, User, LogOut, Settings } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const AdminHeader = () => {
   const { user, logout } = useAuthStore()
+  const { unreadCount, fetchUnreadCount } = useNotificationStore()
   const [showUserMenu, setShowUserMenu] = useState(false)
+  const [previousCount, setPreviousCount] = useState(0)
+  const [showNotification, setShowNotification] = useState(false)
+  const navigate = useNavigate()
+
+  // Buscar contagem de mensagens não lidas ao carregar
+  useEffect(() => {
+    const loadCount = async () => {
+      const count = await fetchUnreadCount()
+      setPreviousCount(count)
+    }
+    loadCount()
+    
+    // Atualizar a cada 30 segundos
+    const interval = setInterval(async () => {
+      const newCount = await fetchUnreadCount()
+      
+      // Se houver novas mensagens, mostrar notificação
+      if (newCount > previousCount) {
+        setShowNotification(true)
+        setTimeout(() => setShowNotification(false), 5000)
+      }
+      
+      setPreviousCount(newCount)
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [previousCount])
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -35,9 +65,20 @@ const AdminHeader = () => {
         {/* Actions */}
         <div className="flex items-center space-x-4">
           {/* Notificações */}
-          <button className="relative p-2 text-gray-600 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition">
+          <button 
+            onClick={() => navigate('/admin/contacts')}
+            className="relative p-2 text-gray-600 hover:text-primary-600 hover:bg-gray-100 rounded-lg transition"
+            title={`${unreadCount} mensagem${unreadCount !== 1 ? 'ns' : ''} não lida${unreadCount !== 1 ? 's' : ''}`}
+          >
             <Bell size={20} />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            {unreadCount > 0 && (
+              <>
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              </>
+            )}
           </button>
 
           {/* User Menu */}
@@ -75,6 +116,40 @@ const AdminHeader = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast de Nova Mensagem */}
+      {showNotification && (
+        <div className="fixed top-20 right-4 z-50 animate-slide-in-right">
+          <div className="bg-white rounded-lg shadow-xl border-2 border-primary-500 p-4 min-w-[300px] flex items-start gap-3">
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                <Bell className="text-primary-600" size={20} />
+              </div>
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-gray-900">Nova Mensagem!</h4>
+              <p className="text-sm text-gray-600 mt-1">
+                Você recebeu uma nova mensagem de contato.
+              </p>
+              <button
+                onClick={() => {
+                  navigate('/admin/contacts')
+                  setShowNotification(false)
+                }}
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium mt-2"
+              >
+                Ver mensagens →
+              </button>
+            </div>
+            <button
+              onClick={() => setShowNotification(false)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   )
 }

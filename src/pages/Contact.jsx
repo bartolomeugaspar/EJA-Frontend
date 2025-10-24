@@ -38,6 +38,9 @@ const Contact = () => {
       
       // Limpar mensagem de sucesso após 5 segundos
       setTimeout(() => setSuccess(false), 5000)
+      
+      // Notificar o sistema que há uma nova mensagem (se houver admin logado)
+      // O contador será atualizado automaticamente pelo polling no AdminHeader
     } catch (err) {
       setError(err.response?.data?.message || 'Erro ao enviar mensagem. Tente novamente.')
     } finally {
