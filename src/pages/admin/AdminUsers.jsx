@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { adminService } from '../../services/adminService'
+import { useAuthStore } from '../../store/authStore'
 import { Search, Filter, UserPlus, Edit, Trash2, ToggleLeft, ToggleRight, Eye, X, Save, CheckCircle, AlertCircle } from 'lucide-react'
 
 const AdminUsers = () => {
+  const { user: currentUser } = useAuthStore()
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -10,6 +12,8 @@ const AdminUsers = () => {
   const [filterStatus, setFilterStatus] = useState('')
   const [showModal, setShowModal] = useState(false)
   const [editingUser, setEditingUser] = useState(null)
+  const [showAlertModal, setShowAlertModal] = useState(false)
+  const [alertMessage, setAlertMessage] = useState('')
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
   const [formData, setFormData] = useState({
     nome_completo: '',
@@ -39,7 +43,11 @@ const AdminUsers = () => {
       if (filterStatus) params.ativo = filterStatus
       
       const response = await adminService.getUsers(params)
-      setUsers(response.data.users || [])
+      const usersList = response.data.users || []
+      console.log('Usuários carregados:', usersList.length)
+      console.log('Usuário logado:', currentUser?.id)
+      console.log('Usuário logado está na lista?', usersList.some(u => u.id === currentUser?.id))
+      setUsers(usersList)
     } catch (error) {
       console.error('Erro ao carregar usuários:', error)
       showToast('error', 'Erro ao carregar usuários')
@@ -58,6 +66,13 @@ const AdminUsers = () => {
   }
 
   const handleDeleteUser = async (userId) => {
+    // Verificar se está tentando deletar a si mesmo
+    if (userId === currentUser?.id) {
+      setAlertMessage('Você não pode deletar sua própria conta!')
+      setShowAlertModal(true)
+      return
+    }
+
     if (window.confirm('Tem certeza que deseja deletar este usuário?')) {
       try {
         await adminService.deleteUser(userId)
@@ -65,13 +80,26 @@ const AdminUsers = () => {
         loadUsers()
       } catch (error) {
         console.error('Erro ao deletar:', error)
-        showToast('error', 'Erro ao deletar')
+        const errorMessage = error.response?.data?.message || 'Erro ao deletar'
+        showToast('error', errorMessage)
       }
     }
   }
 
+  const handleToggleStatusCheck = async (userId) => {
+    // Verificar se está tentando desativar a si mesmo
+    if (userId === currentUser?.id) {
+      setAlertMessage('Você não pode desativar sua própria conta!')
+      setShowAlertModal(true)
+      return
+    }
+
+    await handleToggleStatus(userId)
+  }
+
   const handleOpenModal = (user = null) => {
     if (user) {
+      setEditingUser(user) // IMPORTANTE: Definir o usuário sendo editado
       setFormData({
         nome_completo: user.nome_completo,
         email: user.email,
@@ -134,14 +162,29 @@ const AdminUsers = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    if (!editingUser && formData.senha !== formData.confirmacao_senha) {
-      showToast('error', 'As senhas não coincidem!')
+    // Validar senhas quando está criando OU quando está editando e preencheu senha
+    if (formData.senha || formData.confirmacao_senha) {
+      if (formData.senha !== formData.confirmacao_senha) {
+        showToast('error', 'As senhas não coincidem!')
+        return
+      }
+    }
+    
+    // Se está criando, senha é obrigatória
+    if (!editingUser && !formData.senha) {
+      showToast('error', 'Senha é obrigatória!')
       return
     }
     
     try {
       if (editingUser) {
-        await adminService.updateUser(editingUser.id, formData)
+        // Se não preencheu senha, remover do formData para não enviar vazio
+        const dataToUpdate = { ...formData }
+        if (!dataToUpdate.senha || dataToUpdate.senha.trim() === '') {
+          delete dataToUpdate.senha
+          delete dataToUpdate.confirmacao_senha
+        }
+        await adminService.updateUser(editingUser.id, dataToUpdate)
         showToast('success', 'Usuário atualizado com sucesso!')
       } else {
         const { role, ativo, ...userData } = formData
@@ -305,7 +348,7 @@ const AdminUsers = () => {
                           <Edit size={18} />
                         </button>
                         <button
-                          onClick={() => handleToggleStatus(user.id)}
+                          onClick={() => handleToggleStatusCheck(user.id)}
                           className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition"
                           title={user.ativo ? 'Desativar' : 'Ativar'}
                         >
@@ -574,6 +617,31 @@ const AdminUsers = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Alerta */}
+      {showAlertModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <AlertCircle className="text-red-600" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+                Ação Não Permitida
+              </h3>
+              <p className="text-gray-600 text-center mb-6">
+                {alertMessage}
+              </p>
+              <button
+                onClick={() => setShowAlertModal(false)}
+                className="btn btn-primary w-full"
+              >
+                Entendi
+              </button>
+            </div>
           </div>
         </div>
       )}

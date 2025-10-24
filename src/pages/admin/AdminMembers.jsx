@@ -38,7 +38,10 @@ const AdminMembers = () => {
       if (filterStatus) params.status_aprovacao = filterStatus
       
       const response = await adminService.getMembers(params)
-      setMembers(response.members || [])
+      const membersList = response.members || []
+      console.log('Membros carregados:', membersList.length)
+      console.log('Lista de emails:', membersList.map(m => m.email))
+      setMembers(membersList)
     } catch (error) {
       console.error('Erro ao carregar membros:', error)
       showToast('error', 'Erro ao carregar membros')

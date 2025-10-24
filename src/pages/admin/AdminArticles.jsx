@@ -15,9 +15,11 @@ const AdminArticles = () => {
     try {
       setLoading(true)
       const response = await adminService.getArticles()
-      setArticles(response.data || [])
+      console.log('Resposta da API:', response)
+      setArticles(response.data?.articles || [])
     } catch (error) {
       console.error('Erro ao carregar artigos:', error)
+      setArticles([]) // Garantir que articles seja sempre um array
     } finally {
       setLoading(false)
     }
@@ -97,20 +99,21 @@ const AdminArticles = () => {
                   <span>{article.visualizacoes || 0} visualizações</span>
                   <span>{new Date(article.created_at).toLocaleDateString('pt-BR')}</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <button className="flex-1 btn btn-outline text-sm py-2">
-                    <Eye size={16} className="mr-1" />
-                    Ver
+                <div className="flex items-center gap-2">
+                  <button className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg transition-all duration-200 font-medium text-sm">
+                    <Eye size={18} />
+                    <span>Ver</span>
                   </button>
-                  <button className="flex-1 btn btn-secondary text-sm py-2">
-                    <Edit size={16} className="mr-1" />
-                    Editar
+                  <button className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg transition-all duration-200 font-medium text-sm">
+                    <Edit size={18} />
+                    <span>Editar</span>
                   </button>
                   <button
                     onClick={() => handleDeleteArticle(article.id)}
-                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                    className="p-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 border border-red-200 hover:border-red-300"
+                    title="Deletar artigo"
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={18} />
                   </button>
                 </div>
               </div>
