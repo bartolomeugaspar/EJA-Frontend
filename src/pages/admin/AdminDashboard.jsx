@@ -318,58 +318,14 @@ const AdminDashboard = () => {
           ) : (
             <p className="text-gray-600 text-center py-8">Nenhum novo membro recente</p>
           )}
-          <Link to="/admin/users" className="block mt-4 text-center text-blue-600 hover:text-blue-700 font-medium text-sm">
-            Ver todos os usuários →
+          <Link to="/admin/members" className="block mt-4 text-center text-blue-600 hover:text-blue-700 font-medium text-sm">
+            Ver todos os membros →
           </Link>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl shadow-sm p-6 border border-blue-100">
-        <h2 className="text-lg font-bold text-gray-900 mb-6">Ações Rápidas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Link
-            to="/admin/articles/new"
-            className="group p-5 bg-white rounded-xl hover:shadow-lg transition-all hover:-translate-y-1 border border-gray-200"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-              <BookOpen className="text-white" size={24} />
-            </div>
-            <p className="font-semibold text-gray-900 mb-1">Novo Artigo</p>
-            <p className="text-xs text-gray-600">Criar publicação</p>
-          </Link>
-          <Link
-            to="/admin/programs/new"
-            className="group p-5 bg-white rounded-xl hover:shadow-lg transition-all hover:-translate-y-1 border border-gray-200"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-              <Calendar className="text-white" size={24} />
-            </div>
-            <p className="font-semibold text-gray-900 mb-1">Novo Programa</p>
-            <p className="text-xs text-gray-600">Adicionar evento</p>
-          </Link>
-          <Link
-            to="/admin/users"
-            className="group p-5 bg-white rounded-xl hover:shadow-lg transition-all hover:-translate-y-1 border border-gray-200"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-              <Users className="text-white" size={24} />
-            </div>
-            <p className="font-semibold text-gray-900 mb-1">Usuários</p>
-            <p className="text-xs text-gray-600">Gerenciar membros</p>
-          </Link>
-          <Link
-            to="/admin/reports"
-            className="group p-5 bg-white rounded-xl hover:shadow-lg transition-all hover:-translate-y-1 border border-gray-200"
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-3 group-hover:scale-110 transition-transform shadow-md">
-              <TrendingUp className="text-white" size={24} />
-            </div>
-            <p className="font-semibold text-gray-900 mb-1">Relatórios</p>
-            <p className="text-xs text-gray-600">Ver estatísticas</p>
-          </Link>
-        </div>
-      </div>
+      
     </div>
   )
 }
