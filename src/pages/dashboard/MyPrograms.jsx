@@ -158,7 +158,7 @@ const MyPrograms = () => {
                   Ver Detalhes
                 </button>
                 <button 
-                  onClick={() => handleCancel(program.id)}
+                  onClick={() => handleCancelClick(program.id)}
                   className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
                 >
                   Cancelar Inscrição
@@ -240,6 +240,101 @@ const MyPrograms = () => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Toast de Sucesso/Erro */}
+      {toast.show && (
+        <div className="fixed top-4 right-4 z-50 animate-slide-in">
+          <div className={`rounded-xl shadow-2xl border-2 overflow-hidden max-w-md ${
+            toast.type === 'success' 
+              ? 'bg-gradient-to-br from-green-50 to-green-100 border-green-400' 
+              : 'bg-gradient-to-br from-red-50 to-red-100 border-red-400'
+          }`}>
+            <div className="p-4">
+              <div className="flex items-start gap-3">
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
+                  toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'
+                }`}>
+                  {toast.type === 'success' ? (
+                    <CheckCircle className="text-white" size={24} />
+                  ) : (
+                    <AlertCircle className="text-white" size={24} />
+                  )}
+                </div>
+                <div className="flex-1">
+                  <h3 className={`font-bold text-base mb-1 ${
+                    toast.type === 'success' ? 'text-green-900' : 'text-red-900'
+                  }`}>
+                    {toast.type === 'success' ? 'Sucesso!' : 'Erro!'}
+                  </h3>
+                  <p className={`text-sm ${
+                    toast.type === 'success' ? 'text-green-800' : 'text-red-800'
+                  }`}>
+                    {toast.message}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setToast({ show: false, type: '', message: '' })}
+                  className={`flex-shrink-0 ${
+                    toast.type === 'success' ? 'text-green-600 hover:text-green-800' : 'text-red-600 hover:text-red-800'
+                  }`}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Confirmação de Cancelamento */}
+      {showCancelModal && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black bg-opacity-50 z-50"
+            onClick={() => setShowCancelModal(false)}
+          />
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-gray-900">Cancelar Inscrição</h3>
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <AlertCircle className="text-yellow-600" size={32} />
+                </div>
+                <p className="text-gray-700 text-center">
+                  Tem certeza que deseja cancelar sua inscrição neste programa?
+                </p>
+                <p className="text-sm text-gray-500 text-center mt-2">
+                  Esta ação não poderá ser desfeita.
+                </p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowCancelModal(false)}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-medium"
+                >
+                  Não, manter
+                </button>
+                <button
+                  onClick={handleCancelConfirm}
+                  className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+                >
+                  Sim, cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   )

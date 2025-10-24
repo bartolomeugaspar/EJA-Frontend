@@ -224,33 +224,33 @@ const Login = () => {
 
       {/* Toast de Erro */}
       {showToast && error && (
-        <div className="fixed top-4 right-4 z-50 max-w-md animate-slide-in">
+        <div className="fixed top-4 right-4 z-[9999] max-w-md animate-slide-in">
           <div className={`rounded-xl shadow-2xl border-2 overflow-hidden ${
             error.includes('desativada') || error.includes('inativa')
-              ? 'bg-orange-50 border-orange-400'
-              : 'bg-red-50 border-red-400'
+              ? 'bg-gradient-to-br from-orange-50 to-orange-100 border-orange-400'
+              : 'bg-gradient-to-br from-red-50 to-red-100 border-red-400'
           }`}>
-            <div className="p-4">
+            <div className="p-5">
               <div className="flex items-start gap-3">
-                <div className={`flex-shrink-0 ${
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
                   error.includes('desativada') || error.includes('inativa')
-                    ? 'text-orange-600'
-                    : 'text-red-600'
+                    ? 'bg-orange-500'
+                    : 'bg-red-500'
                 }`}>
-                  <AlertCircle size={24} />
+                  <AlertCircle className="text-white" size={24} />
                 </div>
                 <div className="flex-1">
-                  <h3 className={`font-bold text-base mb-1 ${
+                  <h3 className={`font-bold text-lg mb-1 ${
                     error.includes('desativada') || error.includes('inativa')
                       ? 'text-orange-900'
                       : 'text-red-900'
                   }`}>
                     {error.includes('desativada') || error.includes('inativa') 
                       ? '⚠️ Conta Desativada' 
-                      : 'Erro ao fazer login, credenciais inválidas'
+                      : '❌ Erro ao fazer login'
                     }
                   </h3>
-                  <p className={`text-sm mb-2 ${
+                  <p className={`text-sm mb-2 font-medium ${
                     error.includes('desativada') || error.includes('inativa')
                       ? 'text-orange-800'
                       : 'text-red-800'
