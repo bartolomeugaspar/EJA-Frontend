@@ -89,45 +89,6 @@ const AdminLogs = () => {
         </div>
       )}
 
-      {/* Filtros */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Período</label>
-            <select
-              value={periodo}
-              onChange={(e) => setPeriodo(e.target.value)}
-              className="input"
-            >
-              <option value="24horas">Últimas 24 horas</option>
-              <option value="7dias">Últimos 7 dias</option>
-              <option value="30dias">Últimos 30 dias</option>
-              <option value="total">Todos</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-            <select
-              value={filterSucesso}
-              onChange={(e) => setFilterSucesso(e.target.value)}
-              className="input"
-            >
-              <option value="">Todos</option>
-              <option value="true">Sucesso</option>
-              <option value="false">Falha</option>
-            </select>
-          </div>
-          <div className="flex items-end">
-            <button
-              onClick={() => { loadLogs(); loadAlerts(); }}
-              className="btn btn-primary w-full"
-            >
-              <Filter size={20} className="mr-2" />
-              Aplicar Filtros
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* Tabela de Logs */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
