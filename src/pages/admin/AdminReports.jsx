@@ -6,7 +6,6 @@ const AdminReports = () => {
   const [dashboard, setDashboard] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [selectedPeriod, setSelectedPeriod] = useState('month')
 
   useEffect(() => {
     loadDashboard()
@@ -382,20 +381,9 @@ const AdminReports = () => {
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Relatórios e Análises</h1>
-          <p className="text-gray-600 mt-2">Visualize estatísticas e métricas da plataforma</p>
-        </div>
-        <select
-          value={selectedPeriod}
-          onChange={(e) => setSelectedPeriod(e.target.value)}
-          className="input w-48"
-        >
-          <option value="week">Esta Semana</option>
-          <option value="month">Este Mês</option>
-          <option value="year">Este Ano</option>
-        </select>
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Relatórios e Análises</h1>
+        <p className="text-gray-600 mt-2">Visualize estatísticas e métricas da plataforma</p>
       </div>
 
       {/* Estatísticas Gerais */}

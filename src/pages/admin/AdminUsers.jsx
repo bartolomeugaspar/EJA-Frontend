@@ -237,7 +237,7 @@ const AdminUsers = () => {
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2">
+          <div className="md:col-span-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
               <input
