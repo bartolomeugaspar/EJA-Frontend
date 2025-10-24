@@ -95,6 +95,11 @@ export const adminService = {
     return response.data
   },
 
+  getArticleById: async (id) => {
+    const response = await api.get(`/blog/articles/${id}`)
+    return response.data
+  },
+
   createArticle: async (data) => {
     const response = await api.post('/blog/articles', data)
     return response.data

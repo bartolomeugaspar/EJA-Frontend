@@ -28,6 +28,7 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminMembers from './pages/admin/AdminMembers'
 import AdminArticles from './pages/admin/AdminArticles'
+import ArticleForm from './pages/admin/ArticleForm'
 import AdminPrograms from './pages/admin/AdminPrograms'
 import AdminContacts from './pages/admin/AdminContacts'
 import AdminReports from './pages/admin/AdminReports'
@@ -82,6 +83,8 @@ function App() {
         <Route path="members" element={<AdminMembers />} />
         <Route path="users" element={<AdminUsers />} />
         <Route path="articles" element={<AdminArticles />} />
+        <Route path="articles/new" element={<ArticleForm />} />
+        <Route path="articles/edit/:id" element={<ArticleForm />} />
         <Route path="programs" element={<AdminPrograms />} />
         <Route path="contacts" element={<AdminContacts />} />
         <Route path="reports" element={<AdminReports />} />
