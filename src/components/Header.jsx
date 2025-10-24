@@ -50,28 +50,9 @@ const Header = () => {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-            {isAuthenticated ? (
-              <>
-                <Link
-                  to="/dashboard"
-                  className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition"
-                >
-                  <User size={20} />
-                  <span>{user?.nome_completo?.split(' ')[0]}</span>
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition"
-                >
-                  <LogOut size={20} />
-                  <span>Sair</span>
-                </button>
-              </>
-            ) : (
               <Link to="/login" className="bg-yellow-500 text-white px-6 py-2.5 rounded-lg hover:bg-yellow-600 transition font-semibold shadow-md hover:shadow-lg">
                 Entrar
               </Link>
-            )}
           </div>
 
           {/* Mobile Menu Button */}
