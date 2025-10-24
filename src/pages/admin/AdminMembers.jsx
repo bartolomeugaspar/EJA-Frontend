@@ -11,6 +11,10 @@ const AdminMembers = () => {
   const [editingMember, setEditingMember] = useState(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [selectedMember, setSelectedMember] = useState(null)
+  const [showApproveModal, setShowApproveModal] = useState(false)
+  const [showRejectModal, setShowRejectModal] = useState(false)
+  const [memberToAction, setMemberToAction] = useState(null)
+  const [rejectReason, setRejectReason] = useState('')
   const [toast, setToast] = useState({ show: false, type: '', message: '' })
   const [formData, setFormData] = useState({
     nome_completo: '',
@@ -31,7 +35,6 @@ const AdminMembers = () => {
     try {
       setLoading(true)
       const params = {}
-      
       if (filterStatus) params.status_aprovacao = filterStatus
       
       const response = await adminService.getMembers(params)
@@ -44,27 +47,46 @@ const AdminMembers = () => {
     }
   }
 
-  const handleApproveMember = async (memberId) => {
-    if (!window.confirm('Deseja aprovar este membro?')) return
+  const handleOpenApproveModal = (member) => {
+    setMemberToAction(member)
+    setShowApproveModal(true)
+  }
+
+  const handleOpenRejectModal = (member) => {
+    setMemberToAction(member)
+    setRejectReason('')
+    setShowRejectModal(true)
+  }
+
+  const handleApproveMember = async () => {
+    if (!memberToAction) return
     
     try {
-      await adminService.approveMember(memberId)
-      showToast('success', 'Membro aprovado com sucesso!')
+      console.log('Aprovando membro:', memberToAction.id)
+      const response = await adminService.approveMember(memberToAction.id)
+      console.log('Resposta da aprovação:', response)
+      showToast('success', 'Membro aprovado com sucesso! Usuário criado.')
       loadMembers()
+      setShowApproveModal(false)
+      setMemberToAction(null)
     } catch (error) {
-      console.error('Erro ao aprovar membro:', error)
-      showToast('error', 'Erro ao aprovar membro')
+      console.error('Erro completo ao aprovar membro:', error)
+      console.error('Resposta do erro:', error.response?.data)
+      const errorMessage = error.response?.data?.message || 'Erro ao aprovar membro'
+      showToast('error', errorMessage)
     }
   }
 
-  const handleRejectMember = async (memberId) => {
-    const motivo = window.prompt('Motivo da rejeição (opcional):')
-    if (motivo === null) return // Cancelou
+  const handleRejectMember = async () => {
+    if (!memberToAction) return
     
     try {
-      await adminService.rejectMember(memberId, motivo)
+      await adminService.rejectMember(memberToAction.id, rejectReason)
       showToast('success', 'Candidatura rejeitada')
       loadMembers()
+      setShowRejectModal(false)
+      setMemberToAction(null)
+      setRejectReason('')
     } catch (error) {
       console.error('Erro ao rejeitar membro:', error)
       showToast('error', 'Erro ao rejeitar membro')
@@ -300,7 +322,7 @@ const AdminMembers = () => {
                       {getStatusBadge(member.status_aprovacao)}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      {new Date(member.data_candidatura).toLocaleDateString('pt-BR')}
+                      {new Date(member.data_candidatura || member.created_at).toLocaleDateString('pt-BR')}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center space-x-2">
@@ -314,14 +336,14 @@ const AdminMembers = () => {
                         {member.status_aprovacao === 'pendente' && (
                           <>
                             <button
-                              onClick={() => handleApproveMember(member.id)}
+                              onClick={() => handleOpenApproveModal(member)}
                               className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition"
                               title="Aprovar"
                             >
                               <Check size={18} />
                             </button>
                             <button
-                              onClick={() => handleRejectMember(member.id)}
+                              onClick={() => handleOpenRejectModal(member)}
                               className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition"
                               title="Rejeitar"
                             >
@@ -564,7 +586,7 @@ const AdminMembers = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Data de Candidatura</label>
-                  <p className="text-gray-900">{new Date(selectedMember.data_candidatura).toLocaleDateString('pt-BR')}</p>
+                  <p className="text-gray-900">{new Date(selectedMember.data_candidatura || selectedMember.created_at).toLocaleDateString('pt-BR')}</p>
                 </div>
 
                 <div>
@@ -602,30 +624,113 @@ const AdminMembers = () => {
                 </div>
               </div>
 
-              {selectedMember.status_aprovacao === 'pendente' && (
-                <div className="flex gap-3 pt-4 border-t">
-                  <button
-                    onClick={() => {
-                      handleApproveMember(selectedMember.id)
-                      handleCloseDetailsModal()
-                    }}
-                    className="btn btn-primary flex-1 inline-flex items-center justify-center"
-                  >
-                    <Check size={18} className="mr-2" />
-                    Aprovar Membro
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleRejectMember(selectedMember.id)
-                      handleCloseDetailsModal()
-                    }}
-                    className="btn bg-red-600 text-white hover:bg-red-700 flex-1 inline-flex items-center justify-center"
-                  >
-                    <XCircle size={18} className="mr-2" />
-                    Rejeitar
-                  </button>
-                </div>
-              )}
+              <div className="flex gap-3 pt-4 border-t">
+                <button
+                  onClick={() => {
+                    handleCloseDetailsModal()
+                    handleOpenApproveModal(selectedMember)
+                  }}
+                  className="btn btn-primary flex-1 inline-flex items-center justify-center"
+                >
+                  <Check size={18} className="mr-2" />
+                  Aprovar Membro
+                </button>
+                <button
+                  onClick={() => {
+                    handleCloseDetailsModal()
+                    handleOpenRejectModal(selectedMember)
+                  }}
+                  className="btn bg-red-600 text-white hover:bg-red-700 flex-1 inline-flex items-center justify-center"
+                >
+                  <XCircle size={18} className="mr-2" />
+                  Rejeitar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Aprovação */}
+      {showApproveModal && memberToAction && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-green-100 rounded-full mb-4">
+                <Check className="text-green-600" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+                Aprovar Membro
+              </h3>
+              <p className="text-gray-600 text-center mb-6">
+                Deseja aprovar a candidatura de <strong>{memberToAction.nome_completo}</strong>?
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowApproveModal(false)
+                    setMemberToAction(null)
+                  }}
+                  className="btn bg-gray-200 text-gray-700 hover:bg-gray-300 flex-1"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleApproveMember}
+                  className="btn btn-primary flex-1"
+                >
+                  Confirmar Aprovação
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Rejeição */}
+      {showRejectModal && memberToAction && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full">
+            <div className="p-6">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
+                <XCircle className="text-red-600" size={24} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+                Rejeitar Candidatura
+              </h3>
+              <p className="text-gray-600 text-center mb-4">
+                Deseja rejeitar a candidatura de <strong>{memberToAction.nome_completo}</strong>?
+              </p>
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Motivo da rejeição (opcional)
+                </label>
+                <textarea
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value)}
+                  className="input"
+                  placeholder="Descreva o motivo da rejeição..."
+                  rows="4"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setShowRejectModal(false)
+                    setMemberToAction(null)
+                    setRejectReason('')
+                  }}
+                  className="btn bg-gray-200 text-gray-700 hover:bg-gray-300 flex-1"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleRejectMember}
+                  className="btn bg-red-600 text-white hover:bg-red-700 flex-1"
+                >
+                  Confirmar Rejeição
+                </button>
+              </div>
             </div>
           </div>
         </div>
