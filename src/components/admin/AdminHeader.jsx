@@ -40,15 +40,15 @@ const AdminHeader = () => {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="px-8 py-4 flex items-center justify-between">
+      <div className="px-4 md:px-6 lg:px-8 py-3 md:py-4 flex items-center justify-between">
         {/* Logo e Título */}
-        <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 rounded-lg overflow-hidden bg-white shadow-sm">
+        <div className="flex items-center space-x-2 md:space-x-4">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg overflow-hidden bg-white shadow-sm flex-shrink-0">
             <img src={logoEja} alt="EJA Logo" className="w-full h-full object-contain" />
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Painel Administrativo</h1>
-            <p className="text-xs text-gray-600">Sistema de Gestão EJA</p>
+          <div className="min-w-0">
+            <h1 className="text-base md:text-xl font-bold text-gray-900 truncate">Painel Administrativo</h1>
+            <p className="text-xs text-gray-600 hidden sm:block">Sistema de Gestão EJA</p>
           </div>
         </div>
 
@@ -163,7 +163,7 @@ const AdminHeader = () => {
             onClick={() => setShowUserModal(false)}
           ></div>
           
-          <div className="fixed top-20 right-8 z-50 w-[340px] bg-white rounded-xl shadow-2xl border border-gray-100 max-h-[calc(100vh-6rem)] overflow-hidden animate-fade-in">
+          <div className="fixed top-20 right-4 md:right-8 z-50 w-[calc(100vw-2rem)] sm:w-[340px] max-w-[340px] bg-white rounded-xl shadow-2xl border border-gray-100 max-h-[calc(100vh-6rem)] overflow-hidden animate-fade-in">
             {/* Header do Dropdown */}
             <div className="relative overflow-hidden">
               {/* Background com gradiente e padrão */}

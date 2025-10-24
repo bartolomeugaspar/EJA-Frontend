@@ -261,31 +261,6 @@ const Login = () => {
                   }`}>
                     {error}
                   </p>
-                  
-                  {(error.includes('desativada') || error.includes('inativa')) && (
-                    <div className="mt-3 pt-3 border-t border-orange-300 space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-orange-600">📧</span>
-                        <a 
-                          href="mailto:quetaboost@gmail.com" 
-                          className="text-sm text-orange-700 hover:text-orange-900 underline font-medium"
-                        >
-                          quetaboost@gmail.com
-                        </a>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-orange-600">📞</span>
-                        <a 
-                          href="https://wa.me/244954931747" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-sm text-orange-700 hover:text-orange-900 underline font-medium"
-                        >
-                          +244 954 931 747 (WhatsApp)
-                        </a>
-                      </div>
-                    </div>
-                  )}
                 </div>
                 <button
                   onClick={handleCloseToast}

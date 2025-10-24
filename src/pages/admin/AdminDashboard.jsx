@@ -144,50 +144,50 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div>
+    <div className="pb-20 lg:pb-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-        <p className="text-gray-600">Visão geral do sistema EJA</p>
+      <div className="mb-6 md:mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+        <p className="text-sm md:text-base text-gray-600">Visão geral do sistema EJA</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
         {statCards.map((stat, index) => {
           const Icon = stat.icon
           const TrendIcon = stat.trend === 'up' ? ArrowUp : ArrowDown
           return (
-            <div key={index} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center shadow-md`}>
-                  <Icon className="text-white" size={24} />
+            <div key={index} className="bg-white rounded-xl shadow-sm p-4 md:p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+              <div className="flex items-center justify-between mb-3 md:mb-4">
+                <div className={`w-10 h-10 md:w-12 md:h-12 ${stat.color} rounded-lg flex items-center justify-center shadow-md`}>
+                  <Icon className="text-white" size={20} />
                 </div>
                 <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
                   stat.changeType === 'positive' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                 }`}>
-                  <TrendIcon size={14} />
-                  {stat.change}
+                  <TrendIcon size={12} />
+                  <span className="hidden sm:inline">{stat.change}</span>
                 </div>
               </div>
-              <h3 className="text-gray-600 text-sm font-medium mb-1">{stat.title}</h3>
-              <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+              <h3 className="text-gray-600 text-xs md:text-sm font-medium mb-1">{stat.title}</h3>
+              <p className="text-2xl md:text-3xl font-bold text-gray-900">{stat.value}</p>
             </div>
           )
         })}
       </div>
 
       {/* Gráficos Principais */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
         {/* Crescimento Mensal - Gráfico de Área */}
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm p-4 md:p-6">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Crescimento Mensal</h2>
-              <p className="text-sm text-gray-600">Membros, Programas e Artigos</p>
+              <h2 className="text-base md:text-lg font-bold text-gray-900">Crescimento Mensal</h2>
+              <p className="text-xs md:text-sm text-gray-600">Membros, Programas e Artigos</p>
             </div>
-            <Activity className="text-gray-400" size={20} />
+            <Activity className="text-gray-400" size={18} />
           </div>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={250}>
             <AreaChart data={monthlyData}>
               <defs>
                 <linearGradient id="colorMembros" x1="0" y1="0" x2="0" y2="1">
@@ -216,21 +216,20 @@ const AdminDashboard = () => {
         </div>
 
         {/* Distribuição por Categoria - Gráfico de Pizza */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Categorias</h2>
-              <p className="text-sm text-gray-600">Programas por área</p>
+              <h2 className="text-base md:text-lg font-bold text-gray-900">Categorias</h2>
+              <p className="text-xs md:text-sm text-gray-600">Programas por área</p>
             </div>
-            <TrendingUp className="text-gray-400" size={20} />
+            <TrendingUp className="text-gray-400" size={18} />
           </div>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie
                 data={categoryData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
                 label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                 outerRadius={80}
                 fill="#8884d8"
@@ -258,17 +257,17 @@ const AdminDashboard = () => {
       </div>
 
       {/* Gráficos Secundários */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
         {/* Inscrições Semanais - Gráfico de Barras */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-gray-900">Inscrições Semanais</h2>
-              <p className="text-sm text-gray-600">Últimos 7 dias</p>
+              <h2 className="text-base md:text-lg font-bold text-gray-900">Inscrições Semanais</h2>
+              <p className="text-xs md:text-sm text-gray-600">Últimos 7 dias</p>
             </div>
-            <Calendar className="text-gray-400" size={20} />
+            <Calendar className="text-gray-400" size={18} />
           </div>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={220}>
             <BarChart data={enrollmentData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
               <XAxis dataKey="name" stroke="#6B7280" style={{ fontSize: '12px' }} />
@@ -280,10 +279,10 @@ const AdminDashboard = () => {
         </div>
 
         {/* Novos Membros */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-bold text-gray-900">Novos Membros</h2>
-            <UserPlus className="text-gray-400" size={20} />
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
+            <h2 className="text-base md:text-lg font-bold text-gray-900">Novos Membros</h2>
+            <UserPlus className="text-gray-400" size={18} />
           </div>
           {stats?.recentMembers && stats.recentMembers.length > 0 ? (
             <div className="space-y-3">
